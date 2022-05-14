@@ -4,14 +4,18 @@ Sam:
     5/13 - 
 	MVP:
 	    Networked system with current sound design
-	    terminal feedback
-	    source and sink control
+	    Terminal feedback
+	    Source control
 
-    5/14-5/15 - 
+	5/14 -
+	Node 
+
+    5/15 - 
 	Sound Design:
 	    Pitched water
 	Flow:
 	    Ford Fulkerson
+		Sink control
 
 Egor:
     Visual Interface:

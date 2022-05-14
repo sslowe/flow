@@ -1,0 +1,20 @@
+{
+  "name": "flow",
+  "version": "1.0.0",
+  "description": "Bing Concert Piece for SLOrk 2022",
+  "main": "index.js",
+  "scripts": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sslowe/flow.git"
+  },
+  "author": "Sam Lowe, Egor Alimpiev",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/sslowe/flow/issues"
+  },
+  "homepage": "https://github.com/sslowe/flow#readme",
+  "dependencies": {
+    "osc": "^2.4.3"
+  }
+}
