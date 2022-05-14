@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flow</title>
+    <style>
+        body {
+            padding: 0;
+            margin: 0;
+        }
+    </style>
+
+    <script src="https://cdn.jsdelivr.net/npm/p5@1.4.1/lib/p5.js"></script>
+
+    <script src="helpers.js"></script>
+    <script src="components.js"></script>
+    <script src="sketch_control.js"></script>
+    <script src="input-knobs.js"></script>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+    <link href="main.css" rel="stylesheet" />
+</head>
+
+<body>
+<div class="container">
+    <div class="d-flex justify-content-center"><h1 class="p-4"> flow </h1> </div>
+    <div class="d-flex justify-content-center">
+            <div class="col-md"><main>
+            </main>
+            </div>
+            <div class="col-md">
+                <div class="row justify-content-start mx-auto p-2">
+                    <h2>Controls</h2>
+                </div>
+                <div class="row justify-content-start mx-auto p-2">
+                    <h3>Your hemi is: <span class="" id="playerId">1</span></h3>
+                </div>
+
+                <div class="row justify-content-start mx-auto p-2">
+                    <h3>Select who you want to connect to</h3>
+                </div>
+                <div class="row justify-content-center mx-auto p-2">
+                    <div class="btn-group" role="group" aria-label="Select your node">
+                        <input type="checkbox" class="btn-check" name="edgeselect" id="edgeselect1" autocomplete="off">
+                        <label class="btn btn-outline-primary" for="edgeselect1">Node 1</label>
+
+                        <input type="checkbox" class="btn-check" name="edgeselect" id="edgeselect2" autocomplete="off">
+                        <label class="btn btn-outline-primary" for="edgeselect2">Node 2</label>
+
+                        <input type="checkbox" class="btn-check" name="edgeselect" id="edgeselect3" autocomplete="off">
+                        <label class="btn btn-outline-primary" for="edgeselect3">Node 3</label>
+
+                        <input type="checkbox" class="btn-check" name="edgeselect" id="edgeselect4" autocomplete="off">
+                        <label class="btn btn-outline-primary" for="edgeselect4">Node 4</label>
+
+                        <input type="checkbox" class="btn-check" name="edgeselect" id="edgeselect5" autocomplete="off">
+                        <label class="btn btn-outline-primary" for="edgeselect5">Node 5</label>
+
+                        <input type="checkbox" class="btn-check" name="edgeselect" id="edgeselect6" autocomplete="off">
+                        <label class="btn btn-outline-primary" for="edgeselect6">Node 6</label>
+
+                        <input type="checkbox" class="btn-check" name="edgeselect" id="edgeselect7" autocomplete="off">
+                        <label class="btn btn-outline-primary" for="edgeselect7">Node 7</label>
+
+                        <input type="checkbox" class="btn-check" name="edgeselect" id="edgeselect8" autocomplete="off">
+                        <label class="btn btn-outline-primary" for="edgeselect8">Node 8</label>
+
+                        <input type="checkbox" class="btn-check" name="edgeselect" id="edgeselect9" autocomplete="off">
+                        <label class="btn btn-outline-primary" for="edgeselect9">Node 9</label>
+
+                        <input type="checkbox" class="btn-check" name="edgeselect" id="edgeselect10" autocomplete="off">
+                        <label class="btn btn-outline-primary" for="edgeselect10">Node 10</label>
+                    </div>
+                </div>
+                <div class="row justify-content-start mx-auto p-2">
+                    <h3>Select a channel on a hemi</h3>
+                </div>
+                <div class="row justify-content-center mx-auto p-2">
+                    <div class="col-2 text-center">
+                        <input id="hemichan1" type="range" class="input-knob" data-bgcolor="#ba24ff" data-fgcolor="#ffffff" data-diameter="50" min="1" max="6" step="1"/>
+                        <br><label class="form-label" for="hemichan1">N1Ch<span class="" id="hemichan1val">1</span></label>
+                    </div>
+                    <div class="col-2 text-center">
+                        <input id="hemichan2" type="range" class="input-knob" data-bgcolor="#ba24ff" data-fgcolor="#ffffff" data-diameter="50" min="1" max="6" step="1"/>
+                        <br><label class="form-label" for="hemichan1">N2Ch<span class="" id="hemichan2val">1</span></label>
+                    </div>
+                    <div class="col-2 text-center">
+                        <input id="hemichan3" type="range" class="input-knob" data-bgcolor="#ba24ff" data-fgcolor="#ffffff" data-diameter="50" min="1" max="6" step="1"/>
+                        <br><label class="form-label" for="hemichan1">N3Ch<span class="" id="hemichan3val">1</span></label>
+                    </div>
+                    <div class="col-2 text-center">
+                        <input id="hemichan4" type="range" class="input-knob" data-bgcolor="#ba24ff" data-fgcolor="#ffffff" data-diameter="50" min="1" max="6" step="1"/>
+                        <br><label class="form-label" for="hemichan1">N4Ch<span class="" id="hemichan4val">1</span></label>
+                    </div>
+                    <div class="col-2 text-center">
+                        <input id="hemichan5" type="range" class="input-knob" data-bgcolor="#ba24ff" data-fgcolor="#ffffff" data-diameter="50" min="1" max="6" step="1"/>
+                        <br><label class="form-label" for="hemichan1">N5Ch<span class="" id="hemichan5val">1</span></label>
+                    </div>
+                </div>
+                <div class="row justify-content-center mx-auto p-2">
+                    <div class="col-2 text-center">
+                        <input id="hemichan6" type="range" class="input-knob" data-bgcolor="#ba24ff" data-fgcolor="#ffffff" data-diameter="50" min="1" max="6" step="1"/>
+                        <br><label class="form-label" for="hemichan1">N6Ch<span class="" id="hemichan6val">1</span></label>
+                    </div>
+                    <div class="col-2 text-center">
+                        <input id="hemichan7" type="range" class="input-knob" data-bgcolor="#ba24ff" data-fgcolor="#ffffff" data-diameter="50" min="1" max="6" step="1"/>
+                        <br><label class="form-label" for="hemichan1">N7Ch<span class="" id="hemichan7val">1</span></label>
+                    </div>
+                    <div class="col-2 text-center">
+                        <input id="hemichan8" type="range" class="input-knob" data-bgcolor="#ba24ff" data-fgcolor="#ffffff" data-diameter="50" min="1" max="6" step="1"/>
+                        <br><label class="form-label" for="hemichan1">N8Ch<span class="" id="hemichan8val">1</span></label>
+                    </div>
+                    <div class="col-2 text-center">
+                        <input id="hemichan9" type="range" class="input-knob" data-bgcolor="#ba24ff" data-fgcolor="#ffffff" data-diameter="50" min="1" max="6" step="1"/>
+                        <br><label class="form-label" for="hemichan1">N9Ch<span class="" id="hemichan9val">1</span></label>
+                    </div>
+                    <div class="col-2 text-center">
+                        <input id="hemichan10" type="range" class="input-knob" data-bgcolor="#ba24ff" data-fgcolor="#ffffff" data-diameter="50" min="1" max="6" step="1"/>
+                        <br><label class="form-label" for="hemichan1">N10Ch<span class="" id="hemichan10val">1</span></label>
+                    </div>
+                </div>
+                <div class="row justify-content-start mx-auto p-2">
+                    <h3>Set connection strength</h3>
+                </div>
+                <div class="row justify-content-center mx-auto p-2">
+                    <div class="col-2 text-center">
+                        <input id="flowstrength1" type="range" class="input-knob" data-bgcolor="#ba24ff" data-fgcolor="#ffffff" data-diameter="50" min="0.0" max="1.0" step="0.005"/>
+                        <br><label class="form-label" for="flowstrength1">N1Flow<span class="" id="flowstrength1val">0.5</span></label>
+                    </div>
+                    <div class="col-2 text-center">
+                        <input id="flowstrength2" type="range" class="input-knob" data-bgcolor="#ba24ff" data-fgcolor="#ffffff" data-diameter="50" min="0.0" max="1.0" step="0.005"/>
+                        <br><label class="form-label" for="flowstrength2">N2Flow<span class="" id="flowstrength2val">0.5</span></label>
+                    </div>
+                    <div class="col-2 text-center">
+                        <input id="flowstrength3" type="range" class="input-knob" data-bgcolor="#ba24ff" data-fgcolor="#ffffff" data-diameter="50" min="0.0" max="1.0" step="0.005"/>
+                        <br><label class="form-label" for="flowstrength3">N3Flow<span class="" id="flowstrength3val">0.5</span></label>
+                    </div>
+                    <div class="col-2 text-center">
+                        <input id="flowstrength4" type="range" class="input-knob" data-bgcolor="#ba24ff" data-fgcolor="#ffffff" data-diameter="50" min="0.0" max="1.0" step="0.005"/>
+                        <br><label class="form-label" for="flowstrength4">N4Flow<span class="" id="flowstrength4val">0.5</span></label>
+                    </div>
+                    <div class="col-2 text-center">
+                        <input id="flowstrength5" type="range" class="input-knob" data-bgcolor="#ba24ff" data-fgcolor="#ffffff" data-diameter="50" min="0.0" max="1.0" step="0.005"/>
+                        <br><label class="form-label" for="flowstrength5">N5Flow<span class="" id="flowstrength5val">0.5</span></label>
+                    </div>
+                </div>
+                <div class="row justify-content-center mx-auto p-2">
+                    <div class="col-2 text-center">
+                        <input id="flowstrength6" type="range" class="input-knob" data-bgcolor="#ba24ff" data-fgcolor="#ffffff" data-diameter="50" min="0.0" max="1.0" step="0.005"/>
+                        <br><label class="form-label" for="flowstrength6">N6Flow<span class="" id="flowstrength6val">0.5</span></label>
+                    </div>
+                    <div class="col-2 text-center">
+                        <input id="flowstrength7" type="range" class="input-knob" data-bgcolor="#ba24ff" data-fgcolor="#ffffff" data-diameter="50" min="0.0" max="1.0" step="0.005"/>
+                        <br><label class="form-label" for="flowstrength7">N7Flow<span class="" id="flowstrength7val">0.5</span></label>
+                    </div>
+                    <div class="col-2 text-center">
+                        <input id="flowstrength8" type="range" class="input-knob" data-bgcolor="#ba24ff" data-fgcolor="#ffffff" data-diameter="50" min="0.0" max="1.0" step="0.005"/>
+                        <br><label class="form-label" for="flowstrength8">N8Flow<span class="" id="flowstrength8val">0.5</span></label>
+                    </div>
+                    <div class="col-2 text-center">
+                        <input id="flowstrength9" type="range" class="input-knob" data-bgcolor="#ba24ff" data-fgcolor="#ffffff" data-diameter="50" min="0.0" max="1.0" step="0.005"/>
+                        <br><label class="form-label" for="flowstrength9">N9Flow<span class="" id="flowstrength9val">0.5</span></label>
+                    </div>
+                    <div class="col-2 text-center">
+                        <input id="flowstrength10" type="range" class="input-knob" data-bgcolor="#ba24ff" data-fgcolor="#ffffff" data-diameter="50" min="0.0" max="1.0" step="0.005"/>
+                        <br><label class="form-label" for="flowstrength10">N10Flow<span class="" id="flowstrength10val">0.5</span></label>
+                    </div>
+                </div>
+            </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2" crossorigin="anonymous"></script>
+</body>
+</html>

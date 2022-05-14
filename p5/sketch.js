@@ -4,17 +4,28 @@ for (let i = 0; i < numNodes; i++) {
     nodes.push(n);
 }
 
-function setup() {
-    createCanvas(size, size);
+let edgelist = new EdgeList(nodes);
 
-    // testing
-    frameRate(10);
+// set some test code
+edgelist.activateEdge(1,3);
+edgelist.activateEdge(1,8);
+edgelist.activateEdge(3,5);
+edgelist.activateEdge(8,5);
+edgelist.activateEdge(3,1)
+nodes[1].setSource();
+nodes[5].setSink();
+
+function setup() {
+    createCanvas(csize, csize);
+
 }
 
 function draw() {
-    background(250);
+    clear();
+
+    edgelist.drawEdges();
 
     for (let i = 0; i < numNodes; i++) {
-        nodes[i].draw(Math.random());
+        nodes[i].draw();
     }
 }
