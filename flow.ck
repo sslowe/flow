@@ -1,4 +1,4 @@
-// STABLE CHUCK-ONLY VERSION
+// PARTIAL NODE/WEB INTEGRATION
 
 //-------------------------------------
 //-------------------------------------
@@ -19,10 +19,10 @@ SPB / 4 => dur s;
 SndBuf nodes[nodeCount];
 for (0 => int i; i < nodeCount; i++)
 {    
+    // TODO: Replace with random buf rate water drops
     me.sourceDir() + "samples/node" + i + ".wav" => nodes[i].read; nodes[i].gain(0);
     nodes[i] => dac.chan(i - 1);
 }
-int sourceNode;
 int edges[nodeCount * stations][nodeCount * stations];
 
 //-------------------------------------
@@ -33,9 +33,7 @@ me.arg(0).toInt() => int machineNum;
 
 "224.0.0.1" => string hostname;
 6449 => int port;
-
-OscOut xmit;
-xmit.dest( hostname, port );
+9999 => int nodeInPort;
 
 //-------------------------------------
 //-------------------------------------
@@ -43,13 +41,11 @@ xmit.dest( hostname, port );
 
 if (memberNum == 0)
 {
-   spork ~ kbListenerConductor();
    spork ~ edgeListener();
    spork ~ clock();
 }
 else
 {
-    spork ~ kbListener();
     spork ~ player();
 }
 
@@ -58,100 +54,12 @@ while(true)
     1::second => now;
 }
 
-fun void kbListener()
-{
-    int source;
-    int destMachine;
-    int destNode;
-    int cap;
-    KBHit kb;
-    
-    while (true)
-    {
-        kb => now;
-        
-        // potentially more than 1 key at a time
-        while( kb.more() )
-        {
-            // print key value
-            kb.getchar() - 48 => source;
-        }
-                
-        500::ms => now;
-        kb => now;
-        
-        // potentially more than 1 key at a time
-        while( kb.more() )
-        {
-            // print key value
-            kb.getchar() - 48 => destMachine;
-        }
-                
-        500::ms => now;
-        kb => now;
-        
-        // potentially more than 1 key at a time
-        while( kb.more() )
-        {
-            // print key value
-            kb.getchar() - 48 => destNode;
-        }
-                
-        500::ms => now;
-        kb => now;
-        
-        // potentially more than 1 key at a time
-        while( kb.more() )
-        {
-            // print key value
-            kb.getchar() - 48 => cap;
-        }
-        
-        <<<"Creating edge from " + source + " to (" + destMachine + ", " + destNode + ") with capacity " + cap>>>;
-        xmit.start( "/edge" ); 
-        machineNum => xmit.add; source => xmit.add; destMachine => xmit.add; destNode => xmit.add; cap => xmit.add;
-        xmit.send();
-    }
-}
-
-fun void kbListenerConductor()
-{
-    int machine;
-    int node;
-    KBHit kb;
-    
-    while (true)
-    {
-        kb => now;
-        
-        // potentially more than 1 key at a time
-        while( kb.more() )
-        {
-            // print key value
-            kb.getchar() - 48 => machine;
-        }
-                
-        500::ms => now;
-        kb => now;
-        
-        // potentially more than 1 key at a time
-        while( kb.more() )
-        {
-            // print key value
-            kb.getchar() - 48 => node;
-        }
-        
-        <<<"Setting source to (" + machine + ", " + node + ")">>>;
-        ((machine-1) * nodeCount) + node => sourceNode;
-    }
-}
-
 fun void edgeListener()
 {
     OscIn oinEdge;
     OscMsg oscMsg;
-    port => oinEdge.port;
-    oinEdge.addAddress( "/edge, i i i i i" );
+    nodeInPort => oinEdge.port;
+    oinEdge.addAddress( "/flowEdge, i i i" );
 
     while(true)
     {
@@ -159,12 +67,10 @@ fun void edgeListener()
 
         while(oinEdge.recv(oscMsg) )
         { 
-            oscMsg.getInt(0) => int sourceMachine;
-            oscMsg.getInt(1) => int sourceNode;
-            oscMsg.getInt(2) => int destMachine;
-            oscMsg.getInt(3) => int destNode;
-            oscMsg.getInt(4) => int cap;
-            cap => edges[((sourceMachine - 1) * nodeCount) + sourceNode][((destMachine - 1) * nodeCount) + destNode];
+            oscMsg.getInt(0) => int source;
+            oscMsg.getInt(1) => int dest;
+            oscMsg.getInt(2) => int cap;
+            cap => edges[source][dest];
         }
     }
 }
@@ -201,6 +107,9 @@ fun void playNode(int node)
 
 fun void clock()
 {
+    OscOut xmit;
+    xmit.dest( hostname, port );
+
     0 => int beat;
     int movingEdges[stations * nodeCount][stations * nodeCount];
     int signals[stations * nodeCount];
