@@ -19,8 +19,8 @@ SPB / 4 => dur s;
 SndBuf nodes[nodeCount];
 for (0 => int i; i < nodeCount; i++)
 {    
-    // TODO: Replace with random buf rate water drops
-    me.sourceDir() + "samples/node" + i + ".wav" => nodes[i].read; nodes[i].gain(0);
+    me.sourceDir() + "samples/drop.wav" => nodes[i].read; nodes[i].gain(0);
+    Math.random2f(.5,1.5) => nodes[i].rate;
     nodes[i] => dac.chan(i - 1);
 }
 int edges[nodeCount * stations][nodeCount * stations];
