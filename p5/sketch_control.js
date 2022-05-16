@@ -1,12 +1,18 @@
 //
 
+
+// overwrite for testing purposes
+var playerId = "3";
+
 // read off our own id
 const queryString = window.location.search;
 const urlParams = new URLSearchParams(queryString);
-let playerId = urlParams.get('player');
+var playerId = urlParams.get('player');
 
-// overwrite for testing purposes
-playerId = "3";
+
+const node_machine = "http://localhost:"
+const port = 4399 + parseInt(playerId);
+const destination_address = node_machine+ port.toString();
 
 let nodes = [];
 for (let i = 0; i < numNodes; i++) {
@@ -32,11 +38,25 @@ nodes[5].setSink();
 function setup() {
     createCanvas(csize, csize);
 
+    socket = io(destination_address, { transports : ['websocket'] });
+
+    socket.on("edge_enable", (data) => {
+        console.log(data);
+        if (!edgelist.isActive(data.i, data.j)) {
+            edgelist.activateEdge(data.i, data.j);
+        }
+    });
+    socket.on("edge_disable", (data) => {
+        console.log(data);
+        if (edgelist.isActive(data.i, data.j)) {
+            edgelist.deactivateEdge(data.i, data.j);
+        }
+    });
+
     let nodeSelectBtns = document.querySelectorAll('input[name="nodeselect"]');
     let edgeSelectBtns = document.querySelectorAll('input[name="edgeselect"]');
     let hemichanSelectBtns = document.querySelectorAll('input[name="hemichan"]');
     let flowSetBtns = document.querySelectorAll('input[name="flowstrength"]');
-
 
     // block out "my own node"
     select("#playerId").elt.innerHTML = playerId;
@@ -56,13 +76,22 @@ function setup() {
         select("#hemichan"+String(i+1)).elt.oninput = function () {
             select("#hemichan"+String(i+1)+"val").elt.innerHTML = select("#hemichan"+String(i+1)).value();
             // send message about channel change here
-            // ...
+            socket.emit("hemichan_update", {
+                "i": parseInt(playerId)-1,
+                "j": i,
+                "val": select("#flowstrength"+String(i+1)).value(),
+            });
 
         }
         select("#flowstrength"+String(i+1)).elt.oninput = function () {
             select("#flowstrength"+String(i+1)+"val").elt.innerHTML = Number(select("#flowstrength"+String(i+1)).value()).toFixed(2);
             // send message about flow change here
-            // ...
+
+            socket.emit("flow_update", {
+                "i": parseInt(playerId)-1,
+                "j": i,
+                "val": select("#flowstrength"+String(i+1)).value(),
+            });
 
         }
         select("#edgeselect"+String(i+1)).elt.onclick = function() {
@@ -76,6 +105,10 @@ function setup() {
                 select("#flowstrength"+String(i+1)).elt.setAttribute('data-bgcolor', "#ba24ff");
                 select("#hemichan"+String(i+1)).elt.refresh();
                 select("#flowstrength"+String(i+1)).elt.refresh();
+                socket.emit("edge_enable", {
+                    "i": parseInt(playerId)-1,
+                    "j": i,
+                });
             } else {
                 console.log('disabling');
                 select("#hemichan"+String(i+1)).elt.disabled = true;
@@ -84,10 +117,11 @@ function setup() {
                 select("#flowstrength"+String(i+1)).elt.setAttribute('data-bgcolor', "#ffdefc");
                 select("#hemichan"+String(i+1)).elt.refresh();
                 select("#flowstrength"+String(i+1)).elt.refresh();
+                socket.emit("edge_disable", {
+                    "i": parseInt(playerId)-1,
+                    "j": i,
+                });
             }
-
-            // send message about new edge connection here
-            // ...
         }
     }
 }

@@ -7,29 +7,33 @@ for (let i = 0; i < numNodes; i++) {
 let edgelist = new EdgeList(nodes);
 
 // set some test code
-edgelist.activateEdge(1,3);
-edgelist.activateEdge(1,8);
-edgelist.activateEdge(3,5);
-edgelist.activateEdge(8,5);
-edgelist.activateEdge(3,1)
+// edgelist.activateEdge(1,3);
+// edgelist.activateEdge(1,8);
+// edgelist.activateEdge(3,5);
+// edgelist.activateEdge(8,5);
+// edgelist.activateEdge(3,1)
 nodes[1].setSource();
 nodes[5].setSink();
+
+const destination_address = "http://localhost:4399"
 
 function setup() {
     createCanvas(csize, csize);
 
-    // osc setup
-    var oscPort = new osc.WebSocketPort({
-        url: "ws://localhost:8081", // URL to your Web Socket server.
-        metadata: true
+    socket = io(destination_address, { transports : ['websocket'] });
+
+    socket.on("edge_enable", (data) => {
+        console.log(data);
+        if (!edgelist.isActive(data.i, data.j)) {
+            edgelist.activateEdge(data.i, data.j);
+        }
     });
-
-    oscPort.open();
-
-    oscPort.on("test", function (msg) {
-        console.log("got test message!", msg);
+    socket.on("edge_disable", (data) => {
+        console.log(data);
+        if (edgelist.isActive(data.i, data.j)) {
+            edgelist.deactivateEdge(data.i, data.j);
+        }
     });
-
 }
 
 function draw() {
