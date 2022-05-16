@@ -18,6 +18,18 @@ nodes[5].setSink();
 function setup() {
     createCanvas(csize, csize);
 
+    // osc setup
+    var oscPort = new osc.WebSocketPort({
+        url: "ws://localhost:8081", // URL to your Web Socket server.
+        metadata: true
+    });
+
+    oscPort.open();
+
+    oscPort.on("test", function (msg) {
+        console.log("got test message!", msg);
+    });
+
 }
 
 function draw() {
