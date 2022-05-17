@@ -42,6 +42,7 @@ function draw() {
     edgelist.drawEdges();
 
     for (let i = 0; i < numNodes; i++) {
+        nodes[i].setVolume(Math.random());
         nodes[i].draw();
     }
 }

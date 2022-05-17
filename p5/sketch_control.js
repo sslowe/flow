@@ -23,8 +23,9 @@ for (let i = 0; i < numNodes; i++) {
 let edgelist = new EdgeList(nodes);
 
 // default control parameters
-hemichans = [1,1,1,1,1,1,1,1,1,1];
-flows = [0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5];
+let patterns = [1,1,1,1,1,1,1,1,1,1];
+let pitches  = [1,1,1,1,1,1,1,1,1,1];
+let flows = [0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5];
 
 // set some test code
 // edgelist.activateEdge(1,3);
@@ -55,7 +56,7 @@ function setup() {
 
     let nodeSelectBtns = document.querySelectorAll('input[name="nodeselect"]');
     let edgeSelectBtns = document.querySelectorAll('input[name="edgeselect"]');
-    let hemichanSelectBtns = document.querySelectorAll('input[name="hemichan"]');
+    let patternSelectBtns = document.querySelectorAll('input[name="pattern"]');
     let flowSetBtns = document.querySelectorAll('input[name="flowstrength"]');
 
     // block out "my own node"
@@ -65,23 +66,34 @@ function setup() {
 
     // set onclicks and default values
     for (let i = 0; i < numNodes; i++) {
-        select("#hemichan"+String(i+1)).elt.value = hemichans[i];
+        select("#pattern"+String(i+1)).elt.value = patterns[i];
+        select("#pitch"+String(i+1)).elt.value = pitches[i];
         select("#flowstrength"+String(i+1)).elt.value = flows[i];
-        select("#hemichan"+String(i+1)).elt.disabled = true;
+        select("#pattern"+String(i+1)).elt.disabled = true;
+        select("#pitch"+String(i+1)).elt.disabled = true;
         select("#flowstrength"+String(i+1)).elt.disabled = true;
-        select("#hemichan"+String(i+1)).elt.setAttribute('data-bgcolor', "#ffdefc");
-        select("#flowstrength"+String(i+1)).elt.setAttribute('data-bgcolor', "#ffdefc");
+        select("#pattern"+String(i+1)).elt.setAttribute('data-bgcolor', patternColorInactive);
+        select("#pitch"+String(i+1)).elt.setAttribute('data-bgcolor', pitchColorInactive);
+        select("#flowstrength"+String(i+1)).elt.setAttribute('data-bgcolor', flowColorInactive);
 
-
-        select("#hemichan"+String(i+1)).elt.oninput = function () {
-            select("#hemichan"+String(i+1)+"val").elt.innerHTML = select("#hemichan"+String(i+1)).value();
-            // send message about channel change here
-            socket.emit("hemichan_update", {
+        select("#pattern"+String(i+1)).elt.oninput = function () {
+            select("#pattern"+String(i+1)+"val").elt.innerHTML = select("#pattern"+String(i+1)).value();
+            // send message about pattern change here
+            socket.emit("pattern_update", {
                 "i": parseInt(playerId)-1,
                 "j": i,
-                "val": select("#flowstrength"+String(i+1)).value(),
+                "val": select("#pattern"+String(i+1)).value(),
             });
+        }
 
+        select("#pitch"+String(i+1)).elt.oninput = function () {
+            select("#pitch"+String(i+1)+"val").elt.innerHTML = select("#pitch"+String(i+1)).value();
+            // send message about pitch change here
+            socket.emit("pitch_update", {
+                "i": parseInt(playerId)-1,
+                "j": i,
+                "val": select("#pitch"+String(i+1)).value(),
+            });
         }
         select("#flowstrength"+String(i+1)).elt.oninput = function () {
             select("#flowstrength"+String(i+1)+"val").elt.innerHTML = Number(select("#flowstrength"+String(i+1)).value()).toFixed(2);
@@ -98,24 +110,31 @@ function setup() {
             edgelist.switchEdge(playerId-1, i);
 
             if (edgelist.isActive(playerId-1, i)) {
-                console.log('enabling');
-                select("#hemichan"+String(i+1)).elt.disabled = false;
+                select("#pattern"+String(i+1)).elt.disabled = false;
+                select("#pitch"+String(i+1)).elt.disabled = false;
                 select("#flowstrength"+String(i+1)).elt.disabled = false;
-                select("#hemichan"+String(i+1)).elt.setAttribute('data-bgcolor', "#ba24ff");
-                select("#flowstrength"+String(i+1)).elt.setAttribute('data-bgcolor', "#ba24ff");
-                select("#hemichan"+String(i+1)).elt.refresh();
+                select("#pattern"+String(i+1)).elt.setAttribute('data-bgcolor', patternColorActive);
+                select("#pitch"+String(i+1)).elt.setAttribute('data-bgcolor', pitchColorActive);
+                select("#flowstrength"+String(i+1)).elt.setAttribute('data-bgcolor', flowColorActive);
+                select("#pattern"+String(i+1)).elt.refresh();
+                select("#pitch"+String(i+1)).elt.refresh();
                 select("#flowstrength"+String(i+1)).elt.refresh();
                 socket.emit("edge_enable", {
                     "i": parseInt(playerId)-1,
                     "j": i,
+                    "pattern": select("#pattern"+String(i+1)).elt.value(),
+                    "pitch": select("#pitch"+String(i+1)).elt.value(),
+                    "flow": select("#flowstrength"+String(i+1)).elt.value(),
                 });
             } else {
-                console.log('disabling');
-                select("#hemichan"+String(i+1)).elt.disabled = true;
+                select("#pattern"+String(i+1)).elt.disabled = true;
+                select("#pitch"+String(i+1)).elt.disabled = true;
                 select("#flowstrength"+String(i+1)).elt.disabled = true;
-                select("#hemichan"+String(i+1)).elt.setAttribute('data-bgcolor', "#ffdefc");
-                select("#flowstrength"+String(i+1)).elt.setAttribute('data-bgcolor', "#ffdefc");
-                select("#hemichan"+String(i+1)).elt.refresh();
+                select("#pattern"+String(i+1)).elt.setAttribute('data-bgcolor', patternColorInactive);
+                select("#pitch"+String(i+1)).elt.setAttribute('data-bgcolor', pitchColorInactive);
+                select("#flowstrength"+String(i+1)).elt.setAttribute('data-bgcolor', flowColorInactive);
+                select("#pattern"+String(i+1)).elt.refresh();
+                select("#pitch"+String(i+1)).elt.refresh();
                 select("#flowstrength"+String(i+1)).elt.refresh();
                 socket.emit("edge_disable", {
                     "i": parseInt(playerId)-1,

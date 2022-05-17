@@ -16,6 +16,13 @@ const edgeColorActiveDir2 = [217, 145, 56];
 const edgeColorActiveBoth = [129, 41, 204];
 const edgeColorInactive = [0, 10];
 
+const patternColorActive = "#ba24ff";
+const patternColorInactive = "#ffdefc";
+const pitchColorActive = "#ba24ff";
+const pitchColorInactive = "#ffdefc";
+const flowColorActive = "#ba24ff";
+const flowColorInactive = "#ffdefc";
+
 // positions
 const numNodes = 10;
 const nodePositions = [
