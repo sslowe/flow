@@ -22,11 +22,6 @@ for (let i = 0; i < numNodes; i++) {
 
 let edgelist = new EdgeList(nodes);
 
-// default control parameters
-let patterns = [1,1,1,1,1,1,1,1,1,1];
-let pitches  = [1,1,1,1,1,1,1,1,1,1];
-let flows = [0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5];
-
 // set some test code
 // edgelist.activateEdge(1,3);
 // edgelist.activateEdge(1,8);
@@ -130,6 +125,9 @@ function setup() {
                 select("#pattern"+String(i+1)).elt.disabled = true;
                 select("#pitch"+String(i+1)).elt.disabled = true;
                 select("#flowstrength"+String(i+1)).elt.disabled = true;
+                select("#pattern"+String(i+1)).elt.value = patterns[i];
+                select("#pitch"+String(i+1)).elt.value = pitches[i];
+                select("#flowstrength"+String(i+1)).elt.value = flows[i];
                 select("#pattern"+String(i+1)).elt.setAttribute('data-bgcolor', patternColorInactive);
                 select("#pitch"+String(i+1)).elt.setAttribute('data-bgcolor', pitchColorInactive);
                 select("#flowstrength"+String(i+1)).elt.setAttribute('data-bgcolor', flowColorInactive);

@@ -16,6 +16,12 @@ const edgeColorActiveDir2 = [217, 145, 56];
 const edgeColorActiveBoth = [129, 41, 204];
 const edgeColorInactive = [0, 10];
 
+// default control parameters
+const patterns = [1,1,1,1,1,1,1,1,1,1];
+const pitches  = [1,1,1,1,1,1,1,1,1,1];
+const flows = [0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5];
+
+// control colors
 const patternColorActive = "#ba24ff";
 const patternColorInactive = "#ffdefc";
 const pitchColorActive = "#ba24ff";
