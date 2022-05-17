@@ -23,7 +23,7 @@ Both:
 	5/17 -
 	Work Session
 	 * Conductor Interface (Source control)
-	 * Polish Inteface (One extra row of knobs)
+	 * Polish Inteface (One extra row of knobs, edge_enable actions need to read from the other knobs)
 	 * Connect Interface
 	 * Static Build
 	 * Script

@@ -21,7 +21,7 @@ for (0 => int i; i < nodeCount; i++)
 {    
     me.sourceDir() + "samples/drop.wav" => nodes[i].read; nodes[i].gain(0);
     Math.random2f(.5,1.5) => nodes[i].rate;
-    nodes[i] => dac.chan(i - 1);
+    nodes[i] => dac.chan(i);
 }
 int edges[nodeCount * stations][nodeCount * stations];
 
