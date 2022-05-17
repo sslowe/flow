@@ -70,6 +70,9 @@ for (let i = 0; i < client_websockets.length; i++) {
             console.log(data);
             let edge_i = data.i;
             let edge_j = data.j;
+            let new_pattern = data.pattern;
+            let new_pitch = data.pitch;
+            let new_flow = data.flow;
             // now do what you want
             // e.g.
             edges[edge_i][edge_j] = 0.5;
@@ -94,17 +97,27 @@ for (let i = 0; i < client_websockets.length; i++) {
         });
 
         socket.on("flow_update", function(data) {
+            console.log(data);
             let edge_i = data.i;
             let edge_j = data.j;
             let new_flow = data.val;
             // now do what you want
-            edges[edge_i][edge_j] = new_flow;
+            // edges[edge_i][edge_j] = new_flow;
         });
 
-        socket.on("hemichan_update", function(data) {
+        socket.on("pitch_update", function(data) {
+            console.log(data);
             let edge_i = data.i;
             let edge_j = data.j;
-            let new_hemichan = data.val;
+            let new_pitch = data.val;
+        });
+
+        socket.on("pattern_update", function(data) {
+            console.log(data);
+            let edge_i = data.i;
+            let edge_j = data.j;
+            let new_pattern = data.val;
+
         });
     });
 }
