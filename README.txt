@@ -13,19 +13,28 @@ Sam:
     5/15 - 
 	Sound Design:
 	    Pitched water
-	Flow:
-	    Ford Fulkerson
-		Sink control
 
 Egor:
+	Weekend - 
     Visual Interface:
-	Processing
+		Processing
+
+Both:
+	5/17 -
+	Work Session
+	 * Conductor Interface (Source control)
+	 * Polish Inteface (One extra row of knobs)
+	 * Connect Interface
+	 * Static Build
+	 * Script
+	 * Instructions
 
 ===== WEEK 2 =====
 
 Sam:
-    Performance Visuals
-	Unity with Source/Sink control for conductor?
+	Flow:
+	    Ford Fulkerson
+		Sink control
 
 Egor:
     Graph Dynamics:
