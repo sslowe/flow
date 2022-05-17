@@ -122,9 +122,9 @@ function setup() {
                 socket.emit("edge_enable", {
                     "i": parseInt(playerId)-1,
                     "j": i,
-                    "pattern": select("#pattern"+String(i+1)).elt.value(),
-                    "pitch": select("#pitch"+String(i+1)).elt.value(),
-                    "flow": select("#flowstrength"+String(i+1)).elt.value(),
+                    "pattern": select("#pattern"+String(i+1)).value(),
+                    "pitch": select("#pitch"+String(i+1)).value(),
+                    "flow": select("#flowstrength"+String(i+1)).value(),
                 });
             } else {
                 select("#pattern"+String(i+1)).elt.disabled = true;

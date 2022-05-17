@@ -67,7 +67,7 @@ for (let i = 0; i < client_websockets.length; i++) {
     client_websockets[i].on("connection", (socket) => {
         console.log("got connection with id ", i);
         socket.on("edge_enable", function(data) {
-            console.log(data);
+            // console.log(data);
             let edge_i = data.i;
             let edge_j = data.j;
             let new_pattern = data.pattern;
@@ -84,7 +84,7 @@ for (let i = 0; i < client_websockets.length; i++) {
         });
 
         socket.on("edge_disable", function(data) {
-            console.log(data);
+            // console.log(data);
             let edge_i = data.i;
             let edge_j = data.j;
             // now do what you want
@@ -97,7 +97,7 @@ for (let i = 0; i < client_websockets.length; i++) {
         });
 
         socket.on("flow_update", function(data) {
-            console.log(data);
+            // console.log(data);
             let edge_i = data.i;
             let edge_j = data.j;
             let new_flow = data.val;
@@ -106,14 +106,14 @@ for (let i = 0; i < client_websockets.length; i++) {
         });
 
         socket.on("pitch_update", function(data) {
-            console.log(data);
+            // console.log(data);
             let edge_i = data.i;
             let edge_j = data.j;
             let new_pitch = data.val;
         });
 
         socket.on("pattern_update", function(data) {
-            console.log(data);
+            // console.log(data);
             let edge_i = data.i;
             let edge_j = data.j;
             let new_pattern = data.val;
