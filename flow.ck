@@ -39,7 +39,7 @@ me.arg(0).toInt() => int machineNum;
 //-------------------------------------
 // Spork and Spin
 
-if (memberNum == 0)
+if (machineNum == 0)
 {
    spork ~ edgeListener();
    spork ~ clock();
@@ -80,7 +80,7 @@ fun void player()
     OscIn oinNote;
     OscMsg oscMsg;
     port => oinNote.port;
-    oinNote.addAddress( "/play" + machine + " , i" );
+    oinNote.addAddress( "/play" + machineNum + " , i" );
 
     while(true)
     {

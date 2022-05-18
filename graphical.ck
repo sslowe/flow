@@ -3,7 +3,7 @@
 //-------------------------------------
 //-------------------------------------
 // Magic
-10 => int stations;
+2 => int stations;
 
 //-------------------------------------
 //-------------------------------------
@@ -21,7 +21,7 @@ for (0 => int i; i < nodeCount; i++)
 {    
     me.sourceDir() + "samples/drop.wav" => nodes[i].read; nodes[i].gain(0);
     Math.random2f(.5,1.5) => nodes[i].rate;
-    nodes[i] => dac.chan(i);
+    nodes[i] => dac;//.chan(i);
 }
 int sourceNode;
 int edges[nodeCount * stations][nodeCount * stations];
@@ -42,7 +42,7 @@ xmit.dest( hostname, port );
 //-------------------------------------
 // Spork and Spin
 
-if (memberNum == 0)
+if (machineNum == 0)
 {
    spork ~ kbListenerConductor();
    spork ~ edgeListener();
@@ -158,7 +158,7 @@ fun void edgeListener()
     {
         oinEdge => now;
 
-        while(oinEdge.recv(oscMsg) )
+        while(oinEdge.recv(oscMsg))
         { 
             oscMsg.getInt(0) => int sourceMachine;
             oscMsg.getInt(1) => int sourceNode;
@@ -166,6 +166,7 @@ fun void edgeListener()
             oscMsg.getInt(3) => int destNode;
             oscMsg.getInt(4) => int cap;
             cap => edges[((sourceMachine - 1) * nodeCount) + sourceNode][((destMachine - 1) * nodeCount) + destNode];
+            <<<"Got edge from " + sourceMachine>>>;
         }
     }
 }
@@ -175,7 +176,7 @@ fun void player()
     OscIn oinNote;
     OscMsg oscMsg;
     port => oinNote.port;
-    oinNote.addAddress( "/play" + machine + " , i" );
+    oinNote.addAddress( "/play" + machineNum + " , i" );
 
     while(true)
     {
@@ -197,7 +198,6 @@ fun void playNode(int node)
     oinSync => now;
     0.9 => nodes[node].gain;
     0 => nodes[node].pos;
-    s => now;
 }
 
 fun void clock()
