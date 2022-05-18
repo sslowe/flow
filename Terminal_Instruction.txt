@@ -1,0 +1,10 @@
+1. MOTU -20
+2. Run `graphical $YOUR_MACHINE_NUM` 
+3. 
+    To generate and/or modify an edge, you will type 4 numbers:
+        #1: The speaker on YOUR hemi from which to send the signal
+        #2: The number of the machine that will receive your signal
+        #3: The speaker on THEIR hemi that will receive your signal
+        #4: The strength of the connection
+4. You will get textual feedback on your edge creation history
+5. Make sure to LISTEN for incoming sounds!

@@ -22,12 +22,18 @@ Egor:
 Both:
 	5/17 -
 	Work Session
-	 * Conductor Interface (Source control)
 	 * Polish Inteface (One extra row of knobs, edge_enable actions need to read from the other knobs)
 	 * Connect Interface
-	 * Static Build
-	 * Script
-	 * Instructions
+	 * Script (Text-based)
+	 * Instructions (Text-based)
+
+	5/18 -
+	Work Session
+	* Conductor Interface (Source control)
+	* Static Build(?)
+	* Script (Gui + add instructions)
+	* Instructions (Gui)
+
 
 ===== WEEK 2 =====
 

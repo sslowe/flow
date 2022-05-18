@@ -15,8 +15,10 @@
   },
   "homepage": "https://github.com/sslowe/flow#readme",
   "dependencies": {
+    "connect": "^3.7.0",
     "http": "^0.0.1-security",
     "osc": "^2.4.3",
+    "serve-static": "^1.15.0",
     "socket.io": "^4.5.0"
   }
 }

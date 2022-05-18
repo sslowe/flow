@@ -1,6 +1,9 @@
 const osc = require("osc")
 const http = require("http");
 const socketio = require("socket.io")
+const connect = require('connect')
+const serveStatic = require('serve-static')
+connect().use(serveStatic(__dirname)).listen(8080, () => console.log('Server running on 8080...'))
 
 const STATIONS = 10 // NOTE from Egor: I drew ten stations but can easily change
 const NODES = 6
