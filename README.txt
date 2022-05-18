@@ -29,10 +29,10 @@ Both:
 
 	5/18 -
 	Work Session
-	* Conductor Interface (Source control)
-	* Static Build(?)
-	* Script (Gui + add instructions)
-	* Instructions (Gui)
+	 * Conductor Interface (Source control)
+	 * Static Build(?)
+	 * Script (Gui + add instructions)
+	 * Instructions (Gui)
 
 
 ===== WEEK 2 =====

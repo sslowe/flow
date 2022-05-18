@@ -23,6 +23,7 @@ for (0 => int i; i < nodeCount; i++)
     Math.random2f(.5,1.5) => nodes[i].rate;
     nodes[i] => dac.chan(i);
 }
+int sourceNode;
 int edges[nodeCount * stations][nodeCount * stations];
 
 //-------------------------------------
@@ -42,6 +43,7 @@ me.arg(0).toInt() => int machineNum;
 if (machineNum == 0)
 {
    spork ~ edgeListener();
+   spork ~ sourceListener();
    spork ~ clock();
 }
 else
@@ -52,6 +54,24 @@ else
 while(true)
 {
     1::second => now;
+}
+
+fun void sourceListener()
+{
+    OscIn oinEdge;
+    OscMsg oscMsg;
+    nodeInPort => oinEdge.port;
+    oinEdge.addAddress( "/flowSource, i" );
+
+    while(true)
+    {
+        oinEdge => now;
+        while(oinEdge.recv(oscMsg) )
+        { 
+            oscMsg.getInt(0) => int source;
+        }
+        source => sourceNode;
+    }
 }
 
 fun void edgeListener()
