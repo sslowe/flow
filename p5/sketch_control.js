@@ -22,14 +22,8 @@ for (let i = 0; i < numNodes; i++) {
 
 let edgelist = new EdgeList(nodes);
 
-// set some test code
-// edgelist.activateEdge(1,3);
-// edgelist.activateEdge(1,8);
-// edgelist.activateEdge(3,5);
-// edgelist.activateEdge(8,5);
-// edgelist.activateEdge(3,1);
-nodes[1].setSource();
-nodes[5].setSink();
+var source = sourceDefault;
+var sink = sinkDefault;
 
 function setup() {
     createCanvas(csize, csize);
@@ -37,17 +31,34 @@ function setup() {
     socket = io(destination_address, { transports : ['websocket'] });
 
     socket.on("edge_enable", (data) => {
-        console.log(data);
+        // console.log(data);
         if (!edgelist.isActive(data.i, data.j)) {
             edgelist.activateEdge(data.i, data.j);
         }
     });
     socket.on("edge_disable", (data) => {
-        console.log(data);
+        // console.log(data);
         if (edgelist.isActive(data.i, data.j)) {
             edgelist.deactivateEdge(data.i, data.j);
         }
     });
+
+    socket.on("source_update", (data) => {
+        // console.log(data);
+        nodes[source].setRegular();
+        nodes[data.new_source].setSource();
+        source = data.new_source;
+    });
+
+    socket.on("sink_update", (data) => {
+        // console.log(data);
+        nodes[sink].setRegular();
+        nodes[data.new_sink].setSink();
+        source = data.new_sink;
+    });
+
+    nodes[source].setSource();
+    nodes[sink].setSink();
 
     let nodeSelectBtns = document.querySelectorAll('input[name="nodeselect"]');
     let edgeSelectBtns = document.querySelectorAll('input[name="edgeselect"]');

@@ -5,14 +5,12 @@ const connect = require('connect')
 const serveStatic = require('serve-static')
 connect().use(serveStatic(__dirname)).listen(8080, () => console.log('Server running on 8080...'))
 
-const STATIONS = 10 // NOTE from Egor: I drew ten stations but can easily change
+const STATIONS = 10 
 const NODES = 6
 
 const SIZE = STATIONS // or STATIONS * NODES
 
-// Note from Egor
-// I now think we were not working on the same thing. your graph has six times the edges compared to mine
-// and exponentially more edges
+
 let edges = new Array(SIZE)
 let flow = new Array(SIZE)
   
@@ -65,6 +63,33 @@ for (let i = 0; i < client_machines.length; i++) {
 let viz_server = http.createServer();
 viz_server.listen(4399);
 let viz_socket = socketio(viz_server);
+
+viz_socket.on("connection", (socket) => {
+    console.log("got master connection");
+    socket.on("source_update", function(data) {
+        // console.log(data);
+        let new_source = data.new_source;
+        let previous_source = data.previous_source;
+        // change internal/chuck state here
+        // ...
+
+        for (let i = 0; i < client_websockets.length; i++) {
+            client_websockets[i].emit("source_update", {"new_source": new_source});
+        }
+    });
+
+    socket.on("sink_update", function(data) {
+        // console.log(data);
+        let new_sink = data.new_sink;
+        let previous_sink = data.previous_sink;
+        // change internal/chuck state here
+        // ...
+
+        for (let i = 0; i < client_websockets.length; i++) {
+            client_websockets[i].emit("sink_update", {"new_sink": new_sink});
+        }
+    });
+})
 
 for (let i = 0; i < client_websockets.length; i++) {
     client_websockets[i].on("connection", (socket) => {

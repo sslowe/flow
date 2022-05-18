@@ -29,6 +29,9 @@ const pitchColorInactive = "#ffdefc";
 const flowColorActive = "#ba24ff";
 const flowColorInactive = "#ffdefc";
 
+const sourceDefault = 1;
+const sinkDefault = 3;
+
 // positions
 const numNodes = 10;
 const nodePositions = [
