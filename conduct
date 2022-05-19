@@ -1,3 +1,2 @@
-node index.js
-chuck flow.ck:0
 open http://localhost:8080/p5/view.html
+chuck flow.ck:0 & node index.js && fg

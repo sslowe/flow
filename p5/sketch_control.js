@@ -10,7 +10,7 @@ const urlParams = new URLSearchParams(queryString);
 var playerId = urlParams.get('player');
 
 
-const node_machine = "http://localhost:"
+const node_machine = "Sams-MacBook-Pro.local:"
 const port = 4399 + parseInt(playerId);
 const destination_address = node_machine+ port.toString();
 

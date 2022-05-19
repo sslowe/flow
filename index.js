@@ -33,8 +33,8 @@ var udpPort = new osc.UDPPort({
 udpPort.open();
 
 const client_machines = [
-    "localhost",
-    "localhost",
+    "pho.local",
+    "gelato.local",
     "localhost",
     "localhost",
     "localhost",
@@ -98,7 +98,9 @@ for (let i = 0; i < client_websockets.length; i++) {
             let new_flow = data.flow;
             // now do what you want
             // e.g.
-            edges[(edge_i * NODES) + mapToNode(new_pattern)][(edge_j * NODES) + mapToNode(new_pitch)] =  Math.floor(new_flow * (9))
+            let source = (edge_i * NODES) + (new_pattern - 1)
+            let sink = (edge_j * NODES) + (new_pitch - 1)
+            edges[source][sink] =  Math.floor(new_flow * (9))
 
             for (let j = 0; j < client_websockets.length; j++) {
                 client_websockets[j].emit("edge_enable", {"i": edge_i, "j": edge_j});
@@ -158,7 +160,7 @@ for (let i = 0; i < client_websockets.length; i++) {
                     {
                         flowTemp = edges[(edge_i * NODES) + i][(edge_j * NODES) + j]
                         edges[(edge_i * NODES) + i][(edge_j * NODES) + j] = 0
-                        edges[(edge_i * NODES) + i][(edge_j * NODES) + mapToNode(new_pitch)] = flowTemp
+                        edges[(edge_i * NODES) + i][(edge_j * NODES) + (new_pitch - 1)] = flowTemp
                         return
                     }
                 }
@@ -178,7 +180,7 @@ for (let i = 0; i < client_websockets.length; i++) {
                     {
                         flowTemp = edges[(edge_i * NODES) + i][(edge_j * NODES) + j]
                         edges[(edge_i * NODES) + i][(edge_j * NODES) + j] = 0
-                        edges[(edge_i * NODES) + mapToNode(new_pattern)][(edge_j * NODES) + j] = flowTemp
+                        edges[(edge_i * NODES) + (new_pattern)][(edge_j * NODES) + j] = flowTemp
                         return
                     }
                 }

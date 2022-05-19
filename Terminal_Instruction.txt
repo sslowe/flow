@@ -8,3 +8,10 @@
         #4: The strength of the connection (0-9)
 4. You will get textual feedback on your edge creation history
 5. Make sure to LISTEN for incoming sounds!
+
+Conductor Gesture Reference:
+
+Slider Arm - how strong your connections should be (0-9)
+Holding up a 1 - add an edge
+Holding up double peace signs - roughly double the amount of edges
+Sparkle fingers - mix up some of your edges
