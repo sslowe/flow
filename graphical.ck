@@ -161,11 +161,11 @@ fun void edgeListener()
         while(oinEdge.recv(oscMsg))
         { 
             oscMsg.getInt(0) => int sourceMachine;
-            oscMsg.getInt(1) => int sourceNode;
+            oscMsg.getInt(1) => int source;
             oscMsg.getInt(2) => int destMachine;
             oscMsg.getInt(3) => int destNode;
             oscMsg.getInt(4) => int cap;
-            cap => edges[((sourceMachine - 1) * nodeCount) + sourceNode][((destMachine - 1) * nodeCount) + destNode];
+            cap => edges[((sourceMachine - 1) * nodeCount) + source][((destMachine - 1) * nodeCount) + destNode];
             <<<"Got edge from " + sourceMachine>>>;
         }
     }

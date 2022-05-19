@@ -32,15 +32,13 @@ Both:
 	 * Conductor Interface (Source control)
 	 * Static Build(?)
 	 * Script (Gui + add instructions)
-	 * Instructions (Gui)
 
 
 ===== WEEK 2 =====
 
 Sam:
-	Flow:
-	    Ford Fulkerson
-		Sink control
+	Debug Both Versions
+	Instruction (Gui)
 
 Egor:
     Graph Dynamics:

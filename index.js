@@ -33,16 +33,16 @@ var udpPort = new osc.UDPPort({
 udpPort.open();
 
 const client_machines = [
-    "pho.local",
-    "gelato.local",
-    "localhost",
-    "localhost",
-    "localhost",
-    "localhost",
-    "localhost",
-    "localhost",
-    "localhost",
-    "localhost"
+    //"meatloaf.local",
+    "chowder.local",
+    "Peanutbutter.local",
+    "donut.local",
+    "icetea.local",
+    "jambalaya.local",
+    "lasagna.local",
+    "quinoa.local",
+    "spam.local",
+    "vindaloo.local"
 ];
 
 const viz_machine = "localhost"; // machine that only has the visualization

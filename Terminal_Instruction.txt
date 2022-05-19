@@ -3,7 +3,7 @@
 3. 
     To generate and/or modify an edge, you will type 4 numbers:
         #1: The speaker on YOUR hemi from which to send the signal (0-5)
-        #2: The number of the machine that will receive your signal (0-9)
+        #2: The number of the machine that will receive your signal (1-9)
         #3: The speaker on THEIR hemi that will receive your signal (0-5)
         #4: The strength of the connection (0-9)
 4. You will get textual feedback on your edge creation history
