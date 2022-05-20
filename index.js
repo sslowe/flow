@@ -68,7 +68,7 @@ viz_socket.on("connection", (socket) => {
         // console.log(data);
         let new_source = data.new_source;
         let previous_source = data.previous_source;
-        sourceNode = new_source * NODES + mapToNode(Math.random())
+        sourceNode = new_source * NODES
         for (let i = 0; i < client_websockets.length; i++) {
             client_websockets[i].emit("source_update", {"new_source": new_source});
         }
@@ -100,8 +100,9 @@ for (let i = 0; i < client_websockets.length; i++) {
             // e.g.
             let source = (edge_i * NODES) + (new_pattern - 1)
             let sink = (edge_j * NODES) + (new_pitch - 1)
-            edges[source][sink] =  Math.floor(new_flow * (9))
-
+            let cap = Math.floor(new_flow * (9))
+            console.log("creating edge from " + source + " to " + sink + " with capacity " + cap)
+            edges[source][sink] =  cap
             for (let j = 0; j < client_websockets.length; j++) {
                 client_websockets[j].emit("edge_enable", {"i": edge_i, "j": edge_j});
             }
@@ -218,7 +219,7 @@ function updateChuck() {
                     },
                     {
                         type: "i",
-                        value: flow[i][j]
+                        value: edges[i][j]
                     }
                 ]
             });

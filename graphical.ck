@@ -76,6 +76,14 @@ fun void kbListener()
         {
             // print key value
             kb.getchar() - 48 => source;
+            if (source < 0)
+            {
+                0 => source;
+            }
+            if (source > 5)
+            {
+                5 => source;
+            }
         }
                 
         500::ms => now;
@@ -86,6 +94,14 @@ fun void kbListener()
         {
             // print key value
             kb.getchar() - 48 => destMachine;
+            if (destMachine < 1)
+            {
+                1 => destMachine;
+            }
+            if (destMachine > stations)
+            {
+                stations => destMachine;
+            }
         }
                 
         500::ms => now;
@@ -96,6 +112,14 @@ fun void kbListener()
         {
             // print key value
             kb.getchar() - 48 => destNode;
+            if (destNode < 0)
+            {
+                0 => destNode;
+            }
+            if (destNode > 5)
+            {
+                5 => destNode;
+            }
         }
                 
         500::ms => now;
@@ -106,6 +130,14 @@ fun void kbListener()
         {
             // print key value
             kb.getchar() - 48 => cap;
+            if (cap < 0)
+            {
+                0 => cap;
+            }
+            if (cap > 9)
+            {
+                9 => cap;
+            }
         }
         
         <<<"Creating edge from " + source + " to (" + destMachine + ", " + destNode + ") with capacity " + cap>>>;
@@ -223,7 +255,7 @@ fun void clock()
             0 => beat;
         }
     
-        for (1 => int i; i < signals.size(); i++)
+        for (0 => int i; i < signals.size(); i++)
         {
             if (signals[i] != 0)
             {
@@ -243,7 +275,7 @@ fun void clock()
                 continue;
             }
         
-            for (1 => int j; j < signals.size(); j++)
+            for (0 => int j; j < signals.size(); j++)
             {
                 if (movingEdges[i][j] > 0 && newSignals[j] == 0)
                 {

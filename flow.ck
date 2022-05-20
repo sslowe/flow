@@ -21,7 +21,7 @@ for (0 => int i; i < nodeCount; i++)
 {    
     me.sourceDir() + "samples/drop.wav" => nodes[i].read; nodes[i].gain(0);
     Math.random2f(.5,1.5) => nodes[i].rate;
-    nodes[i] => dac//.chan(i);
+    nodes[i] => dac;//.chan(i);
 }
 int sourceNode;
 int edges[nodeCount * stations][nodeCount * stations];
@@ -35,6 +35,10 @@ me.arg(0).toInt() => int machineNum;
 "224.0.0.1" => string hostname;
 6449 => int port;
 9999 => int nodeInPort;
+OscIn oinSync;
+OscMsg oscMsg;
+port => oinSync.port;
+oinSync.addAddress( "/sync, i" );
 
 //-------------------------------------
 //-------------------------------------
@@ -109,21 +113,16 @@ fun void player()
         while(oinNote.recv(oscMsg) )
         { 
             oscMsg.getInt(0) => int node;
-            spork ~ playNode(node);
+            spork ~ playNode(nodes[node]);
         }
     }
 }
 
-fun void playNode(int node)
+fun void playNode(SndBuf node)
 {
-    OscIn oinSync;
-    OscMsg oscMsg;
-    port => oinSync.port;
-    oinSync.addAddress( "/sync, i" );
     oinSync => now;
-    0.9 => nodes[node].gain;
-    0 => nodes[node].pos;
-    s => now;
+    0.9 => node.gain;
+    0 => node.pos;
 }
 
 fun void clock()
@@ -152,12 +151,16 @@ fun void clock()
             0 => beat;
         }
     
-        for (1 => int i; i < signals.size(); i++)
+        for (0 => int i; i < signals.size(); i++)
         {
             if (signals[i] != 0)
             {
                 (i / nodeCount) + 1 => int destMachine;
                 i % nodeCount => int destNode;
+                if (i != sourceNode)
+                {
+                    <<<"Sending signal to (" + destMachine + ", " +destNode + ")">>>;
+                }
                 xmit.start( "/play" + destMachine ); destNode => xmit.add;
                 xmit.send();
             }
@@ -172,7 +175,7 @@ fun void clock()
                 continue;
             }
         
-            for (1 => int j; j < signals.size(); j++)
+            for (0 => int j; j < signals.size(); j++)
             {
                 if (movingEdges[i][j] > 0 && newSignals[j] == 0)
                 {
