@@ -22,10 +22,18 @@ for (0 => int i; i < nodeCount; i++)
     Math.random2(0,2) => int sample;
     me.sourceDir() + "samples/drop" + sample + ".wav" => nodes[i].read; nodes[i].gain(0);
     Math.random2f(.5,1.5) => nodes[i].rate;
-    nodes[i] => dac;//.chan(i);
+    nodes[i] => dac.chan(i);
 }
 int sourceNode;
-int edges[nodeCount * stations][nodeCount * stations];
+int edges[stations][stations];
+int flow[stations][stations];
+for (0 => int i; i < stations; i++)
+{    
+    for (0 => int j; j < stations; j++)
+    {
+        -1 => edges[i][j];
+    }
+}
 
 //-------------------------------------
 //-------------------------------------
@@ -85,7 +93,7 @@ fun void edgeListener()
     OscIn oinEdge;
     OscMsg oscMsg;
     nodeInPort => oinEdge.port;
-    oinEdge.addAddress( "/flowEdge, i i i" );
+    oinEdge.addAddress( "/flowEdge, i i i i" );
 
     while(true)
     {
@@ -95,8 +103,10 @@ fun void edgeListener()
         { 
             oscMsg.getInt(0) => int source;
             oscMsg.getInt(1) => int dest;
-            oscMsg.getInt(2) => int cap;
-            cap => edges[source][dest];
+            oscMsg.getInt(2) => int node;
+            oscMsg.getInt(3) => int cap;
+            node => edges[source][dest];
+            cap => flow[source][dest];
         }
     }
 }
@@ -132,8 +142,8 @@ fun void clock()
     xmit.dest( hostname, port );
 
     0 => int beat;
-    int movingEdges[stations * nodeCount][stations * nodeCount];
-    int signals[stations * nodeCount];
+    int movingFlow[stations][stations];
+    int signals[stations][nodeCount];
 
     while (true)
     {
@@ -141,74 +151,96 @@ fun void clock()
         {
             for (0 => int i; i < signals.size(); i++)
             {  
-                0 => signals[i];
-
                 for (0 => int j; j < signals.size(); j++)
                 {  
-                    edges[i][j] => movingEdges[i][j];
+                    flow[i][j] => movingFlow[i][j];
+                } 
+
+                for (0 => int j; j < nodeCount; j++)
+                {  
+                    0 => signals[i][j];
                 } 
             }
-            1 => signals[sourceNode];
+            1 => signals[sourceNode][0];
             0 => beat;
         }
     
         for (0 => int i; i < signals.size(); i++)
         {
-            if (signals[i] != 0)
+            for (0 => int j; j < nodeCount; j++)
             {
-                (i / nodeCount) + 1 => int destMachine;
-                i % nodeCount => int destNode;
-                0 => int shouldFire;
-                if (i == sourceNode)
+                if (signals[i][j] != 0)
                 {
-                    if (beat == 0)
+                    0 => int shouldFire;
+                    if (i == sourceNode)
                     {
-                        1 => shouldFire;
+                        if (beat == 0)
+                        {
+                            1 => shouldFire;
+                        }
+                        else
+                        {
+                            for (0 => int j; j < signals.size(); j++)
+                            {
+                                if (movingFlow[i][j] > 0)
+                                {
+                                    1 => shouldFire;
+                                    break;
+                                }
+                            }
+                        }
+                    
                     }
                     else
                     {
-                        for (0 => int j; j < signals.size(); j++)
-                        {
-                            if (movingEdges[i][j] > 0)
-                            {
-                                1 => shouldFire;
-                                break;
-                            }
-                        }
+                        1 => shouldFire;
                     }
-                    
+
+                    if (shouldFire)
+                    {
+                        xmit.start( "/play" + i ); j => xmit.add;
+                        xmit.send();
+                    }
                 }
-                else
+            }   
+        }
+    
+        int newSignals[signals.size()][nodeCount];
+        1 => newSignals[sourceNode][0];
+        int sumSignals[signals.size()];
+        for (0 => int i; i < signals.size(); i++)
+        {
+            for (0 => int j; j < nodeCount; j++)
+            {
+                if (signals[i][j] != 0)
                 {
-                    1 => shouldFire;
-                }
-                
-                if (shouldFire)
-                {
-                    <<<"FIRING">>>;
-                    xmit.start( "/play" + destMachine ); destNode => xmit.add;
-                    xmit.send();
+                    sumSignals[i] + 1 => sumSignals[i];
                 }
             }
         }
-    
-        int newSignals[signals.size()];
-        1 => newSignals[sourceNode];
         for (0 => int i; i < signals.size(); i++)
         {
-            if (signals[i] == 0)
-            {
-                continue;
-            }
-        
             for (0 => int j; j < signals.size(); j++)
             {
-                if (movingEdges[i][j] > 0 && newSignals[j] == 0)
+                if (sumSignals[i] == 0)
                 {
-                    1 => newSignals[j];
-                    movingEdges[i][j] - 1 => movingEdges[i][j];
                     break;
                 }
+                if (movingEdges[i][j] > 0 && newSignals[j][edges[i][j]] == 0)
+                {
+                    1 => newSignals[j][edges[i][j]];
+                    movingEdges[i][j] - 1 => movingEdges[i][j];
+                    sumSignals[i] - 1 => sumSignals[i];
+                    break;
+                }
+            }
+        }
+
+        for (0 => int i; i < signals.size(); i++)
+        {
+            for (0 => int j; j < nodeCount; j++)
+            {
+                newSignals[i][j] => signals[i][j];
             }
         }
    

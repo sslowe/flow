@@ -8,15 +8,18 @@ connect().use(serveStatic(__dirname)).listen(8080, () => console.log('Server run
 const STATIONS = 10 
 const NODES = 6
 
-const SIZE = STATIONS * NODES
+const SIZE = STATIONS
 
 let edges = new Array(SIZE)
-let sourceNode = NODES // First node of hemi 2 to align with default viewer
+let flow = new Array(SIZE)
+let sourceNode = 1 // hemi 2 to align with default viewer
   
 for (let i = 0; i < edges.length; i++) {
     edges[i] = new Array(SIZE)
+    flow[i] = new Array(SIZE)
     for (let j = 0; j < edges.length; j++) {
-        edges[i][j] = 0
+        edges[i][j] = -1
+        flow[i][j] = 0
     }
 }
 
@@ -65,7 +68,7 @@ viz_socket.on("connection", (socket) => {
         // console.log(data);
         let new_source = data.new_source;
         let previous_source = data.previous_source;
-        sourceNode = new_source * NODES
+        sourceNode = new_source - 1
         for (let i = 0; i < client_websockets.length; i++) {
             client_websockets[i].emit("source_update", {"new_source": new_source});
         }
@@ -90,20 +93,18 @@ for (let i = 0; i < client_websockets.length; i++) {
             // console.log(data);
             let edge_i = data.i;
             let edge_j = data.j;
-            let new_pattern = data.pattern;
             let new_pitch = data.pitch;
             let new_flow = data.flow;
             // now do what you want
             // e.g.
-            let source = (edge_j * NODES) + (new_pattern - 1)
-            let sink = (edge_i * NODES) + (new_pitch - 1)
             let cap = Math.floor(new_flow * (9)) + 1
-            console.log("creating edge from " + source + " to " + sink + " with capacity " + cap)
-            edges[source][sink] =  cap
+            console.log("creating edge from " + edge_j + " to " + edge_i + " with capacity " + cap)
+            edges[edge_j][edge_i] =  new_pitch - 1
+            flow[edge_j][edge_i] = cap
             for (let j = 0; j < client_websockets.length; j++) {
-                client_websockets[j].emit("edge_enable", {"i": edge_i, "j": edge_j});
+                client_websockets[j].emit("edge_enable", {"i": edge_j, "j": edge_i});
             }
-            viz_socket.emit("edge_enable", {"i": edge_i, "j": edge_j});
+            viz_socket.emit("edge_enable", {"i": edge_j, "j": edge_i});
         });
 
         socket.on("edge_disable", function(data) {
@@ -111,17 +112,12 @@ for (let i = 0; i < client_websockets.length; i++) {
             let edge_i = data.i;
             let edge_j = data.j;
             // now do what you want
-            for (let i = 0; i < NODES; i++)
-            {
-                for (let j = 0; j < NODES; j ++)
-                {
-                    edges[(edge_j * NODES) + i][(edge_i * NODES) + j] = 0
-                }
-            }
+            edges[edge_j][edge_i] = -1
+            flow[edge_j][edge_i] = 0
             for (let j = 0; j < client_websockets.length; j++) {
-                client_websockets[j].emit("edge_disable", {"i": edge_i, "j": edge_j});
+                client_websockets[j].emit("edge_disable", {"i": edge_j, "j": edge_i});
             }
-            viz_socket.emit("edge_disable", {"i": edge_i, "j": edge_j});
+            viz_socket.emit("edge_disable", {"i": edge_j, "j": edge_i});
         });
 
         socket.on("flow_update", function(data) {
@@ -130,17 +126,7 @@ for (let i = 0; i < client_websockets.length; i++) {
             let edge_j = data.j;
             let new_flow = data.val;
             // now do what you want
-            for (let i = 0; i < NODES; i++)
-            {
-                for (let j = 0; j < NODES; j ++)
-                {
-                    if( edges[(edge_j * NODES) + i][(edge_i * NODES) + j] != 0 )
-                    {
-                        edges[(edge_j * NODES) + i][(edge_i * NODES) + j] = Math.floor(new_flow * (9)) + 1
-                        return
-                    }
-                }
-            }
+            flow[edge_j][edge_i] = Math.floor(new_flow * (9)) + 1
         });
 
         socket.on("pitch_update", function(data) {
@@ -148,21 +134,7 @@ for (let i = 0; i < client_websockets.length; i++) {
             let edge_i = data.i;
             let edge_j = data.j;
             let new_pitch = data.val;
-            let flowTemp = 0;
-
-            for (let i = 0; i < NODES; i++)
-            {
-                for (let j = 0; j < NODES; j ++)
-                {
-                    if( edges[(edge_j * NODES) + i][(edge_i * NODES) + j] != 0 )
-                    {
-                        flowTemp = edges[(edge_j * NODES) + i][(edge_i * NODES) + j]
-                        edges[(edge_j * NODES) + i][(edge_i * NODES) + j] = 0
-                        edges[(edge_j * NODES) + i][(edge_i * NODES) + (new_pitch - 1)] = flowTemp
-                        return
-                    }
-                }
-            }
+            edges[edge_j][edge_i] = new_pitch
         });
 
         socket.on("pattern_update", function(data) {
@@ -170,19 +142,7 @@ for (let i = 0; i < client_websockets.length; i++) {
             let edge_i = data.i;
             let edge_j = data.j;
             let new_pattern = data.val;
-            for (let i = 0; i < NODES; i++)
-            {
-                for (let j = 0; j < NODES; j ++)
-                {
-                    if( edges[(edge_j * NODES) + i][(edge_i * NODES) + j] != 0 )
-                    {
-                        flowTemp = edges[(edge_j * NODES) + i][(edge_i * NODES) + j]
-                        edges[(edge_j * NODES) + i][(edge_i * NODES) + j] = 0
-                        edges[(edge_j * NODES) + (new_pattern)][(edge_i * NODES) + j] = flowTemp
-                        return
-                    }
-                }
-            }
+            // nada
         });
     });
 }
@@ -217,6 +177,10 @@ function updateChuck() {
                     {
                         type: "i",
                         value: edges[i][j]
+                    },
+                    {
+                        type: "i",
+                        value: flow[i][j]
                     }
                 ]
             });
