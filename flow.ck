@@ -14,6 +14,16 @@ SPB / 4 => dur s;
 
 //-------------------------------------
 //-------------------------------------
+// Output Meter
+
+Gain meter_input => Gain g => OnePole p => blackhole;
+1.0 => meter_input.gain;
+meter_input => g;
+3 => g.op;
+0.99 => p.pole;
+
+//-------------------------------------
+//-------------------------------------
 // Graph
 6 => int nodeCount;
 SndBuf nodes[nodeCount];
@@ -23,6 +33,10 @@ for (0 => int i; i < nodeCount; i++)
     me.sourceDir() + "samples/drop" + sample + ".wav" => nodes[i].read; nodes[i].gain(0);
     Math.random2f(.5,1.5) => nodes[i].rate;
     nodes[i] => dac.chan(i);
+
+    // connect to meter
+    nodes[i] => meter_input;
+
 }
 int sourceNode;
 int edges[stations][stations];
@@ -108,6 +122,19 @@ fun void edgeListener()
             node => edges[source][dest];
             cap => flow[source][dest];
         }
+    }
+}
+
+fun void emit_level() {
+    OscOut xmit;
+    xmit.dest( hostname, port );
+
+    while(true) {
+        xmit.start( "/audiolevel" );
+        machineNum => xmit.add;
+        p.last() => xmit.add;
+        xmit.send();
+        100::ms => now;
     }
 }
 

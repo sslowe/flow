@@ -147,6 +147,12 @@ for (let i = 0; i < client_websockets.length; i++) {
     });
 }
 
+udpPort.on("audiolevel", function (oscMsg, timeTag, info) {
+    console.log("An OSC message just arrived!", oscMsg);
+    console.log("Remote info is: ", info);
+});
+
+
 setInterval(updateChuck, 500)
 
 function updateChuck() {
