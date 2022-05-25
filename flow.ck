@@ -32,7 +32,7 @@ for (0 => int i; i < nodeCount; i++)
     Math.random2(0,2) => int sample;
     me.sourceDir() + "samples/drop" + sample + ".wav" => nodes[i].read; nodes[i].gain(0);
     Math.random2f(.5,1.5) => nodes[i].rate;
-    nodes[i] => dac.chan(i);
+    nodes[i] => dac;//.chan(i);
 
     // connect to meter
     nodes[i] => meter_input;
@@ -75,6 +75,7 @@ if (machineNum == 0)
 else
 {
     spork ~ player();
+    spork ~ emit_level();
 }
 
 while(true)
