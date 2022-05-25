@@ -8,6 +8,7 @@ class Node {
         this.state = 0;
         // volume from 0 to 1
         this.vol = 0;
+        this.own = 0;
     }
 
     setRegular() {
@@ -18,8 +19,8 @@ class Node {
         this.state = 1;
     }
 
-    setSink() {
-        this.state = -1;
+    setOwn() {
+        this.own = 1;
     }
 
     setVolume(vol) {
@@ -29,18 +30,19 @@ class Node {
     draw() {
         let cFull = color(...nodeColor);
         let cVol = color(...nodeOuterColor);
-
+        let cOwn = color(...nodeOwnColor);
         noStroke();
         fill(cVol)
         ellipse(this.x, this.y, nodeSize*(1+this.vol), nodeSize*(1+this.vol));
         if (this.state === 1) {
             strokeWeight(nodeStroke);
             stroke(nodeSourceColor);
-        } else if (this.state === -1) {
-            strokeWeight(nodeStroke);
-            stroke(nodeSinkColor);
         }
-        fill(cFull);
+        if (this.own === 1) {
+            fill(cOwn);
+        } else {
+            fill(cFull);
+        }
         ellipse(this.x, this.y, nodeSize, nodeSize);
 
     }

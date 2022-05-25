@@ -23,7 +23,6 @@ for (let i = 0; i < numNodes; i++) {
 let edgelist = new EdgeList(nodes);
 
 var source = sourceDefault;
-var sink = sinkDefault;
 
 function setup() {
     createCanvas(csize, csize);
@@ -50,15 +49,8 @@ function setup() {
         source = data.new_source;
     });
 
-    socket.on("sink_update", (data) => {
-        // console.log(data);
-        nodes[sink].setRegular();
-        nodes[data.new_sink].setSink();
-        source = data.new_sink;
-    });
-
     nodes[source].setSource();
-    nodes[sink].setSink();
+    nodes[playerId-1].setOwn();
 
     let nodeSelectBtns = document.querySelectorAll('input[name="nodeselect"]');
     let edgeSelectBtns = document.querySelectorAll('input[name="edgeselect"]');

@@ -16,7 +16,7 @@ let edgelist = new EdgeList(nodes);
 const destination_address = "http://localhost:4399"
 
 var source = sourceDefault;
-var sink = sinkDefault;
+var pitch = 0;
 
 function setup() {
     createCanvas(csize, csize);
@@ -37,17 +37,12 @@ function setup() {
     });
 
     nodes[sourceDefault].setSource();
-    nodes[sinkDefault].setSink();
 
     select("#sourceselect"+String(sourceDefault+1)).elt.checked = true;
-    select("#sourceselect"+String(sinkDefault+1)).elt.disabled = true;
-    select("#sinkselect"+String(sinkDefault+1)).elt.checked = true;
-    select("#sinkselect"+String(sourceDefault+1)).elt.disabled = true;
+    select("#pitchselect"+String(sinkDefault+1)).elt.checked = true;
 
     for (let i = 0; i < numNodes; i++) {
-        select("#sourceselect"+String(i+1)).elt.onclick = function() {
-            select("#sinkselect"+String(source+1)).elt.disabled = false;
-            select("#sinkselect"+String(i+1)).elt.disabled = true;
+        select("#sourceselect" + String(i + 1)).elt.onclick = function () {
             nodes[source].setRegular();
             nodes[i].setSource();
 
@@ -55,16 +50,11 @@ function setup() {
 
             source = i;
         }
-
-        select("#sinkselect"+String(i+1)).elt.onclick = function() {
-            select("#sourceselect"+String(sink+1)).elt.disabled = false;
-            select("#sourceselect"+String(i+1)).elt.disabled = true;
-            nodes[sink].setRegular();
-            nodes[i].setSink();
-
-            socket.emit("sink_update", {"previous_sink": sink, "new_sink": i});
-
-            sink = i;
+    }
+    for (let i = 0; i < 6; i++) {
+        select("#pitchselect"+String(i+1)).elt.onclick = function() {
+            socket.emit("pitch_update", {"previous_pitch": pitch, "new_pitch": i});
+            pitch = i;
         }
     }
 }

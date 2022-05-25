@@ -74,15 +74,12 @@ viz_socket.on("connection", (socket) => {
         }
     });
 
-    socket.on("sink_update", function(data) {
-        // console.log(data);
-        let new_sink = data.new_sink;
-        let previous_sink = data.previous_sink;
-        // change internal/chuck state here
-        // ...
-        for (let i = 0; i < client_websockets.length; i++) {
-            client_websockets[i].emit("sink_update", {"new_sink": new_sink});
-        }
+    socket.on("pitch_update", function(data) {
+        console.log(data);
+        let new_pitch = data.new_pitch;
+        let previous_pitch = data.previous_pitch;
+
+
     });
 })
 
@@ -135,14 +132,6 @@ for (let i = 0; i < client_websockets.length; i++) {
             let edge_j = data.j;
             let new_pitch = data.val;
             edges[edge_j][edge_i] = new_pitch - 1
-        });
-
-        socket.on("pattern_update", function(data) {
-            // console.log(data);
-            let edge_i = data.i;
-            let edge_j = data.j;
-            let new_pattern = data.val;
-            // nada
         });
     });
 }
