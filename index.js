@@ -98,7 +98,7 @@ for (let i = 0; i < client_websockets.length; i++) {
             // now do what you want
             // e.g.
             let cap = Math.floor(new_flow * (9)) + 1
-            console.log("creating edge from " + edge_j + " to " + edge_i + " with capacity " + cap + "playing node " + (new_pitch - 1))
+            console.log("creating edge from " + edge_j + " to " + edge_i + " with capacity " + cap + " playing node " + (new_pitch - 1))
             edges[edge_j][edge_i] = new_pitch - 1
             flow[edge_j][edge_i] = cap
             for (let j = 0; j < client_websockets.length; j++) {
