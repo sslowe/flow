@@ -19,6 +19,7 @@
 }
 .btn-check:checked + .btn-outline-primary:focus, .btn-check:active + .btn-outline-primary:focus, .btn-outline-primary:active:focus, .btn-outline-primary.active:focus, .btn-outline-primary.dropdown-toggle.show:focus {
     box-shadow: 0 0 0 0rem rgba(13, 110, 253, 0.5);
+    background-color: #ffffff;
 }
 
 .input-knob:disabled {
