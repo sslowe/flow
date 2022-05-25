@@ -41,18 +41,21 @@ Sam:
 	[DONE] Reverse signal direction
 	[DONE] More sound design
 	[DONE] Source Behavior
-	More Debugging
+	[DONE] More Debugging
 	[DONE] Automate Pattern Control
 	[DONE] Instruction (Gui)
 
 Egor:
-    Graph Visualization
-	Fade Blue
-	Remove Pattern Control
-	Remove Sink Control + Add Pitch
-	Add node indicator
+	[DONE] Remove Pattern Control
+	[DONE] Remove Sink Control + Add Pitch
+	[DONE] Add node indicator
 
 ===== WEEK 3 =====
 
 Sam:
-	Different flow modes
+	Different flow modes/Effects
+
+Egor:
+	Control for the above^^
+	Finish Graph Visualization
+	Fade Blue
