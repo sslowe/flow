@@ -11,15 +11,12 @@ const NODES = 6
 const SIZE = STATIONS * NODES
 
 let edges = new Array(SIZE)
-let flow = new Array(SIZE)
 let sourceNode = NODES // First node of hemi 2 to align with default viewer
   
 for (let i = 0; i < edges.length; i++) {
     edges[i] = new Array(SIZE)
-    flow[i] = new Array(SIZE)
     for (let j = 0; j < edges.length; j++) {
         edges[i][j] = 0
-        flow[i][j] = 0
     }
 }
 
@@ -98,9 +95,9 @@ for (let i = 0; i < client_websockets.length; i++) {
             let new_flow = data.flow;
             // now do what you want
             // e.g.
-            let source = (edge_i * NODES) + (new_pattern - 1)
-            let sink = (edge_j * NODES) + (new_pitch - 1)
-            let cap = Math.floor(new_flow * (9))
+            let source = (edge_j * NODES) + (new_pattern - 1)
+            let sink = (edge_i * NODES) + (new_pitch - 1)
+            let cap = Math.floor(new_flow * (9)) + 1
             console.log("creating edge from " + source + " to " + sink + " with capacity " + cap)
             edges[source][sink] =  cap
             for (let j = 0; j < client_websockets.length; j++) {
@@ -118,7 +115,7 @@ for (let i = 0; i < client_websockets.length; i++) {
             {
                 for (let j = 0; j < NODES; j ++)
                 {
-                    edges[(edge_i * NODES) + i][(edge_j * NODES) + j] = 0
+                    edges[(edge_j * NODES) + i][(edge_i * NODES) + j] = 0
                 }
             }
             for (let j = 0; j < client_websockets.length; j++) {
@@ -137,9 +134,9 @@ for (let i = 0; i < client_websockets.length; i++) {
             {
                 for (let j = 0; j < NODES; j ++)
                 {
-                    if( edges[(edge_i * NODES) + i][(edge_j * NODES) + j] != 0 )
+                    if( edges[(edge_j * NODES) + i][(edge_i * NODES) + j] != 0 )
                     {
-                        edges[(edge_i * NODES) + i][(edge_j * NODES) + j] = Math.floor(new_flow * (9))
+                        edges[(edge_j * NODES) + i][(edge_i * NODES) + j] = Math.floor(new_flow * (9)) + 1
                         return
                     }
                 }
@@ -157,11 +154,11 @@ for (let i = 0; i < client_websockets.length; i++) {
             {
                 for (let j = 0; j < NODES; j ++)
                 {
-                    if( edges[(edge_i * NODES) + i][(edge_j * NODES) + j] != 0 )
+                    if( edges[(edge_j * NODES) + i][(edge_i * NODES) + j] != 0 )
                     {
-                        flowTemp = edges[(edge_i * NODES) + i][(edge_j * NODES) + j]
-                        edges[(edge_i * NODES) + i][(edge_j * NODES) + j] = 0
-                        edges[(edge_i * NODES) + i][(edge_j * NODES) + (new_pitch - 1)] = flowTemp
+                        flowTemp = edges[(edge_j * NODES) + i][(edge_i * NODES) + j]
+                        edges[(edge_j * NODES) + i][(edge_i * NODES) + j] = 0
+                        edges[(edge_j * NODES) + i][(edge_i * NODES) + (new_pitch - 1)] = flowTemp
                         return
                     }
                 }
@@ -177,11 +174,11 @@ for (let i = 0; i < client_websockets.length; i++) {
             {
                 for (let j = 0; j < NODES; j ++)
                 {
-                    if( edges[(edge_i * NODES) + i][(edge_j * NODES) + j] != 0 )
+                    if( edges[(edge_j * NODES) + i][(edge_i * NODES) + j] != 0 )
                     {
-                        flowTemp = edges[(edge_i * NODES) + i][(edge_j * NODES) + j]
-                        edges[(edge_i * NODES) + i][(edge_j * NODES) + j] = 0
-                        edges[(edge_i * NODES) + (new_pattern)][(edge_j * NODES) + j] = flowTemp
+                        flowTemp = edges[(edge_j * NODES) + i][(edge_i * NODES) + j]
+                        edges[(edge_j * NODES) + i][(edge_i * NODES) + j] = 0
+                        edges[(edge_j * NODES) + (new_pattern)][(edge_i * NODES) + j] = flowTemp
                         return
                     }
                 }
@@ -225,11 +222,6 @@ function updateChuck() {
             });
         }
     }
-} 
-
-function mapToNode(input)
-{
-    Math.floor(input * (NODES + 1))
 }
 
 

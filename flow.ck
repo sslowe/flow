@@ -19,7 +19,8 @@ SPB / 4 => dur s;
 SndBuf nodes[nodeCount];
 for (0 => int i; i < nodeCount; i++)
 {    
-    me.sourceDir() + "samples/drop.wav" => nodes[i].read; nodes[i].gain(0);
+    Math.random2(0,2) => int sample;
+    me.sourceDir() + "samples/drop" + sample + ".wav" => nodes[i].read; nodes[i].gain(0);
     Math.random2f(.5,1.5) => nodes[i].rate;
     nodes[i] => dac;//.chan(i);
 }
@@ -157,12 +158,37 @@ fun void clock()
             {
                 (i / nodeCount) + 1 => int destMachine;
                 i % nodeCount => int destNode;
-                if (i != sourceNode)
+                0 => int shouldFire;
+                if (i == sourceNode)
                 {
-                    <<<"Sending signal to (" + destMachine + ", " +destNode + ")">>>;
+                    if (beat == 0)
+                    {
+                        1 => shouldFire;
+                    }
+                    else
+                    {
+                        for (0 => int j; j < signals.size(); j++)
+                        {
+                            if (movingEdges[i][j] > 0)
+                            {
+                                1 => shouldFire;
+                                break;
+                            }
+                        }
+                    }
+                    
                 }
-                xmit.start( "/play" + destMachine ); destNode => xmit.add;
-                xmit.send();
+                else
+                {
+                    1 => shouldFire;
+                }
+                
+                if (shouldFire)
+                {
+                    <<<"FIRING">>>;
+                    xmit.start( "/play" + destMachine ); destNode => xmit.add;
+                    xmit.send();
+                }
             }
         }
     

@@ -37,10 +37,17 @@ Both:
 ===== WEEK 2 =====
 
 Sam:
-	Debug Both Versions
+	[DONE] Debug Both Versions 
+	[DONE] Reverse signal direction
+	[DONE] More sound design
+	[DONE] Source Behavior
+	More Debugging (Random disconnections {source control?})
+	Automate Pattern Control
 	Instruction (Gui)
 
 Egor:
-    Graph Dynamics:
-         Viral Evolution 
+    Graph Visualization
+	Fade Blue
+	Remove Pattern Control
+	Remove Sink Control
 
