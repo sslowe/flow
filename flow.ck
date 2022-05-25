@@ -22,7 +22,7 @@ for (0 => int i; i < nodeCount; i++)
     Math.random2(0,2) => int sample;
     me.sourceDir() + "samples/drop" + sample + ".wav" => nodes[i].read; nodes[i].gain(0);
     Math.random2f(.5,1.5) => nodes[i].rate;
-    nodes[i] => dac.chan(i);
+    nodes[i] => dac;//.chan(i);
 }
 int sourceNode;
 int edges[stations][stations];
@@ -198,7 +198,7 @@ fun void clock()
 
                     if (shouldFire)
                     {
-                        xmit.start( "/play" + i ); j => xmit.add;
+                        xmit.start( "/play" + (i+1) ); j => xmit.add;
                         xmit.send();
                     }
                 }
@@ -226,12 +226,15 @@ fun void clock()
                 {
                     break;
                 }
-                if (movingEdges[i][j] > 0 && newSignals[j][edges[i][j]] == 0)
+                if (edges[i][j] != -1)
                 {
-                    1 => newSignals[j][edges[i][j]];
-                    movingEdges[i][j] - 1 => movingEdges[i][j];
-                    sumSignals[i] - 1 => sumSignals[i];
-                    break;
+                    if (movingFlow[i][j] > 0 && newSignals[j][edges[i][j]] == 0)
+                    {
+                        1 => newSignals[j][edges[i][j]];
+                        movingFlow[i][j] - 1 => movingFlow[i][j];
+                        sumSignals[i] - 1 => sumSignals[i];
+                        break;
+                    }
                 }
             }
         }
@@ -245,7 +248,6 @@ fun void clock()
         }
    
         beat + 1 => beat;
-        newSignals @=> signals;
         xmit.start( "/sync" ); 0 => xmit.add;
         xmit.send();
         s => now;

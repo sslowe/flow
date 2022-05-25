@@ -43,11 +43,16 @@ Sam:
 	[DONE] Source Behavior
 	More Debugging
 	[DONE] Automate Pattern Control
-	Instruction (Gui)
+	[DONE] Instruction (Gui)
 
 Egor:
     Graph Visualization
 	Fade Blue
 	Remove Pattern Control
-	Remove Sink Control
+	Remove Sink Control + Add Pitch
+	Add node indicator
 
+===== WEEK 3 =====
+
+Sam:
+	Different flow modes
