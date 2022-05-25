@@ -13,6 +13,7 @@ const SIZE = STATIONS
 let edges = new Array(SIZE)
 let flow = new Array(SIZE)
 let sourceNode = 1 // hemi 2 to align with default viewer
+let sourceSamp = 3 // node 4 to align with default viewer
   
 for (let i = 0; i < edges.length; i++) {
     edges[i] = new Array(SIZE)
@@ -78,7 +79,7 @@ viz_socket.on("connection", (socket) => {
         console.log(data);
         let new_pitch = data.new_pitch;
         let previous_pitch = data.previous_pitch;
-
+        sourceSamp = new_pitch
 
     });
 })
@@ -152,6 +153,10 @@ function updateChuck() {
             {
                 type: "i",
                 value: sourceNode
+            },
+            {
+                type: "i",
+                value: sourceSamp
             }
         ]
     });

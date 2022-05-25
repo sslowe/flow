@@ -38,6 +38,7 @@ for (0 => int i; i < nodeCount; i++)
     nodes[i] => meter_input;
 }
 int sourceNode;
+int sourceSamp;
 int edges[stations][stations];
 int flow[stations][stations];
 for (0 => int i; i < stations; i++)
@@ -88,8 +89,9 @@ fun void sourceListener()
     OscIn oinEdge;
     OscMsg oscMsg;
     nodeInPort => oinEdge.port;
-    oinEdge.addAddress( "/flowSource, i" );
+    oinEdge.addAddress( "/flowSource, i i" );
     int source;
+    int sample;
 
     while(true)
     {
@@ -97,8 +99,10 @@ fun void sourceListener()
         while(oinEdge.recv(oscMsg) )
         { 
             oscMsg.getInt(0) => source;
+            oscMsg.getInt(1) => sample;
         }
         source => sourceNode;
+        sample => sourceSamp;
     }
 }
 
@@ -188,7 +192,7 @@ fun void clock()
                     0 => signals[i][j];
                 } 
             }
-            1 => signals[sourceNode][0];
+            1 => signals[sourceNode][sourceSamp];
             0 => beat;
         }
     
@@ -199,7 +203,7 @@ fun void clock()
                 if (signals[i][j] != 0)
                 {
                     0 => int shouldFire;
-                    if (i == sourceNode)
+                    if (i == sourceNode && j == sourceSamp)
                     {
                         if (beat == 0)
                         {
@@ -207,9 +211,9 @@ fun void clock()
                         }
                         else
                         {
-                            for (0 => int j; j < signals.size(); j++)
+                            for (0 => int k; k < signals.size(); k++)
                             {
-                                if (movingFlow[i][j] > 0)
+                                if (movingFlow[i][k] > 0)
                                 {
                                     1 => shouldFire;
                                     break;
@@ -233,7 +237,7 @@ fun void clock()
         }
     
         int newSignals[signals.size()][nodeCount];
-        1 => newSignals[sourceNode][0];
+        1 => newSignals[sourceNode][sourceSamp];
         int sumSignals[signals.size()];
         for (0 => int i; i < signals.size(); i++)
         {
