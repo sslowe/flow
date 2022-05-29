@@ -54,8 +54,13 @@ Egor:
 
 Sam:
 	Different flow modes/Effects
+	ten machines -> make sure it works
 
 Egor:
 	Control for the above^^
 	Finish Graph Visualization
+	    sound animation of edges?
+	    put numbers on the pictures
+
 	Fade Blue
+    Force update state osc message to all viewers

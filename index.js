@@ -33,6 +33,15 @@ var udpPort = new osc.UDPPort({
 
 udpPort.open();
 
+var udpPlayInfo = new osc.UDPPort({
+    localAddress: "0.0.0.0",
+    localPort: 6451,
+    remoteAddress: "localhost",//"Sams-Macbook-Pro.local",
+    remotePort: 9998
+});
+
+udpPlayInfo.open();
+
 const client_machines = [
     //"meatloaf.local",
     "chowder.local",
@@ -137,9 +146,17 @@ for (let i = 0; i < client_websockets.length; i++) {
     });
 }
 
-udpPort.on("audiolevel", function (oscMsg, timeTag, info) {
-    console.log("An OSC message just arrived!", oscMsg);
-    console.log("Remote info is: ", info);
+udpPlayInfo.on("message", function (msg, timeTag, info) {
+    console.log("An OSC message just arrived!", msg);
+    if (msg.address === "/audiolevel") {
+
+        var level_scaling = 1.0
+
+        var machine = msg.args[0]-1;
+        var level = msg.args[0] * level_scaling;
+
+        viz_socket.emit("audiolevel", {"id": machine, "level": level});
+    }
 });
 
 
@@ -187,5 +204,4 @@ function updateChuck() {
         }
     }
 }
-
 

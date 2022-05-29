@@ -131,7 +131,7 @@ fun void edgeListener()
 
 fun void emit_level() {
     OscOut xmit;
-    xmit.dest( hostname, port );
+    xmit.dest( "localhost", 6451 );
 
     while(true) {
         xmit.start( "/audiolevel" );

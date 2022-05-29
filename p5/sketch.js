@@ -36,6 +36,11 @@ function setup() {
         }
     });
 
+    socket.on("audiolevel", (data) => {
+        console.log(data);
+        nodes[data.id].setVolume(data.level);
+    });
+
     nodes[sourceDefault].setSource();
 
     select("#sourceselect"+String(sourceDefault+1)).elt.checked = true;
