@@ -67,12 +67,16 @@ function setup() {
             socket.emit("source_update", {"previous_source": source, "new_source": i});
 
             source = i;
+
+            // button latch bugfix?
+            select("#canvas").elt.focus();
         }
     }
     for (let i = 0; i < 6; i++) {
         select("#pitchselect"+String(i+1)).elt.onclick = function() {
             socket.emit("pitch_update", {"previous_pitch": pitch, "new_pitch": i});
             pitch = i;
+            select("#canvas").elt.focus();
         }
     }
 }

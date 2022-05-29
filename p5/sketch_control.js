@@ -134,6 +134,9 @@ function setup() {
                     "j": i,
                 });
             }
+
+            // button latch bugfix?
+            select("#canvas").elt.focus();
         }
     }
 }
