@@ -49,6 +49,20 @@ function setup() {
         source = data.new_source;
     });
 
+    socket.on("force_state", (data) => {
+        console.log(data);
+        for (let i=0; i<10; i++) {
+            for (let j=0; j<10; j++) {
+                edge_value = data.edges[j][i];
+                if (edge_value === -1) {
+                    edgelist.deactivateEdge(j, i);
+                } else {
+                    edgelist.activateEdge(j,i);
+                }
+            }
+        }
+    });
+
     nodes[source].setSource();
     nodes[playerId-1].setOwn();
 

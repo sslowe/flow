@@ -8,7 +8,7 @@ class Node {
         this.state = 0;
         // volume from 0 to 1
         this.vol = 0;
-        this.own = a0;
+        this.own = 0;
     }
 
     setRegular() {

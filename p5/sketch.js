@@ -41,6 +41,19 @@ function setup() {
         nodes[data.id].setVolume(data.level);
     });
 
+    socket.on("force_state", (data) => {
+       for (let i=0; i<10; i++) {
+           for (let j=0; j<10; j++) {
+               edge_value = data.edges[j][i];
+               if (edge_value === -1) {
+                   edgelist.deactivateEdge(j, i);
+               } else {
+                   edgelist.activateEdge(j,i);
+               }
+           }
+       }
+    });
+
     nodes[sourceDefault].setSource();
 
     select("#sourceselect"+String(sourceDefault+1)).elt.checked = true;

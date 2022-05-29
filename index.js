@@ -103,7 +103,6 @@ for (let i = 0; i < client_websockets.length; i++) {
             let new_pitch = data.pitch;
             let new_flow = data.flow;
             // now do what you want
-            // e.g.
             let cap = Math.floor(new_flow * (9)) + 1
             console.log("creating edge from " + edge_j + " to " + edge_i + " with capacity " + cap + " playing node " + (new_pitch - 1))
             edges[edge_j][edge_i] = new_pitch - 1
@@ -147,7 +146,6 @@ for (let i = 0; i < client_websockets.length; i++) {
 }
 
 udpPlayInfo.on("message", function (msg, timeTag, info) {
-    console.log("An OSC message just arrived!", msg);
     if (msg.address === "/audiolevel") {
 
         var level_scaling = 1.0
@@ -160,7 +158,7 @@ udpPlayInfo.on("message", function (msg, timeTag, info) {
 });
 
 
-setInterval(updateChuck, 500)
+setInterval(updateChuck, 500);
 
 function updateChuck() {
 
@@ -205,3 +203,11 @@ function updateChuck() {
     }
 }
 
+setInterval(forceCommonState, 2000);
+
+function forceCommonState() {
+    for (let j = 0; j < client_websockets.length; j++) {
+        client_websockets[j].emit("force_state", {"edges": edges});
+    }
+    viz_socket.emit("force_state", {"edges": edges});
+}
