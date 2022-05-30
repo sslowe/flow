@@ -3,7 +3,7 @@
 //-------------------------------------
 //-------------------------------------
 // Magic
-10 => int stations;
+11 => int stations;
 
 //-------------------------------------
 //-------------------------------------
@@ -27,12 +27,15 @@ meter_input => g;
 // Graph
 6 => int nodeCount;
 SndBuf nodes[nodeCount];
+float bufRates[nodeCount];
+float bufMods[2];
+0 => bufMods[0]; 0 => bufMods[1];
 for (0 => int i; i < nodeCount; i++)
 {    
     Math.random2(0,2) => int sample;
     me.sourceDir() + "samples/drop" + sample + ".wav" => nodes[i].read; nodes[i].gain(0);
-    Math.random2f(.5,1.5) => nodes[i].rate;
-    nodes[i] => dac;//.chan(i);
+    Math.random2f(.3,1.7) => bufRates[i];
+    nodes[i] => dac.chan(i);
 
     // connect to meter
     nodes[i] => meter_input;
@@ -71,12 +74,14 @@ if (machineNum == 0)
 {
    spork ~ edgeListener();
    spork ~ sourceListener();
+   spork ~ bufServer();
    spork ~ clock();
 }
 else
 {
     spork ~ player();
     spork ~ emit_level();
+    spork ~ bufListener();
 }
 
 while(true)
@@ -155,16 +160,24 @@ fun void player()
         while(oinNote.recv(oscMsg) )
         { 
             oscMsg.getInt(0) => int node;
-            spork ~ playNode(nodes[node]);
+            spork ~ playNode(node);
         }
     }
 }
 
-fun void playNode(SndBuf node)
+fun void playNode(int node)
 {
     oinSync => now;
-    0.9 => node.gain;
-    0 => node.pos;
+    if(bufRates[node] >=1)
+    {
+        (bufMods[1] * bufRates[node]) + ((1 - bufMods[1]) * 1) => nodes[node].rate;
+    }
+    else
+    {
+        (bufMods[0] * bufRates[node]) + ((1 - bufMods[0]) * 1) => nodes[node].rate;
+    }
+    0.9 => nodes[node].gain;
+    0 => nodes[node].pos;
 }
 
 fun void clock()
@@ -235,52 +248,143 @@ fun void clock()
                 }
             }   
         }
-    
-        int newSignals[signals.size()][nodeCount];
-        1 => newSignals[sourceNode][sourceSamp];
-        int sumSignals[signals.size()];
-        for (0 => int i; i < signals.size(); i++)
-        {
-            for (0 => int j; j < nodeCount; j++)
-            {
-                if (signals[i][j] != 0)
-                {
-                    sumSignals[i] + 1 => sumSignals[i];
-                }
-            }
-        }
-        for (0 => int i; i < signals.size(); i++)
-        {
-            for (0 => int j; j < signals.size(); j++)
-            {
-                if (sumSignals[i] == 0)
-                {
-                    break;
-                }
-                if (edges[i][j] != -1)
-                {
-                    if (movingFlow[i][j] > 0 && newSignals[j][edges[i][j]] == 0)
-                    {
-                        1 => newSignals[j][edges[i][j]];
-                        movingFlow[i][j] - 1 => movingFlow[i][j];
-                        sumSignals[i] - 1 => sumSignals[i];
-                        break;
-                    }
-                }
-            }
-        }
-
-        for (0 => int i; i < signals.size(); i++)
-        {
-            for (0 => int j; j < nodeCount; j++)
-            {
-                newSignals[i][j] => signals[i][j];
-            }
-        }
    
+        propagatePriority(signals) @=> signals;
         beat + 1 => beat;
         xmit.start( "/sync" ); 0 => xmit.add;
         xmit.send();
         s => now;
+    }
+}
+
+fun int[][] propagatePriority(int signals[][])
+{
+    int newSignals[signals.size()][nodeCount];
+    1 => newSignals[sourceNode][sourceSamp];
+    int sumSignals[signals.size()];
+    for (0 => int i; i < signals.size(); i++)
+    {
+        for (0 => int j; j < nodeCount; j++)
+        {
+            if (signals[i][j] != 0)
+            {
+                sumSignals[i] + 1 => sumSignals[i];
+            }
+        }
+    }
+    for (0 => int i; i < signals.size(); i++)
+    {
+        for (0 => int j; j < signals.size(); j++)
+        {
+            if (sumSignals[i] == 0)
+            {
+                break;
+            }
+            if (edges[i][j] != -1)
+            {
+                if (movingFlow[i][j] > 0 && newSignals[j][edges[i][j]] == 0)
+                {
+                    1 => newSignals[j][edges[i][j]];
+                    movingFlow[i][j] - 1 => movingFlow[i][j];
+                    sumSignals[i] - 1 => sumSignals[i];
+                    break;
+                }
+            }
+        }
+    }
+
+    return newSignals;
+}
+
+fun int[][] propagateMax(int signals[][])
+{
+    int newSignals[signals.size()][nodeCount];
+    1 => newSignals[sourceNode][sourceSamp];
+    int sumSignals[signals.size()];
+    for (0 => int i; i < signals.size(); i++)
+    {
+        for (0 => int j; j < nodeCount; j++)
+        {
+            if (signals[i][j] != 0)
+            {
+                sumSignals[i] + 1 => sumSignals[i];
+            }
+        }
+    }
+    for (0 => int i; i < signals.size(); i++)
+    {
+        1 => int sinksLeft;
+        while (sinksLeft && sumSignals[i] > 0)
+        {
+            -1 => int maxIdx;
+            0 => int maxFlow;
+            for (0 => int j; j < signals.size(); j++)
+            {
+                if (movingFlow[i][j] > maxFlow && newSignals[j][edges[i][j]] == 0)
+                {
+                    j => maxIdx;
+                    movingFlow[i][j] => maxFlow;
+                }
+            }
+            if (maxIdx >= 0)
+            {
+                1 => newSignals[maxIdx][edges[i][maxIdx]];
+                movingFlow[i][maxIdx] - 1 => movingFlow[i][maxIdx];
+                sumSignals[i] - 1 => sumSignals[i];
+            }
+            else
+            {
+                0 => sinksLeft;
+            }
+        }
+    }
+
+    return newSignals;
+}
+
+fun void bufServer()
+{
+    OscIn oinMod;
+    OscMsg oscMsg;
+    nodeInPort => oinMod.port;
+    oinEdge.addAddress( "/bufMod, i f f" );
+    int node;
+    float low;
+    float high;
+
+    while(true)
+    {
+        oinMod => now;
+        while(oinMod.recv(oscMsg) )
+        { 
+            oscMsg.getInt(0) => node;
+            oscMsg.getFloat(1) => low;
+            oscMsg.getFloat(2) => high;
+
+            xmit.start( "/bufMod" + node ); 
+            low => xmit.add; high => xmit.add;
+            xmit.send();
+        }
+    }
+}
+
+fun void bufListener()
+{
+    OscIn oinMod;
+    OscMsg oscMsg;
+    port => oinMod.port;
+    oinEdge.addAddress( "/bufMod" + (machineNum - 1) + ", f f" );
+    float low;
+    float high;
+
+    while(true)
+    {
+        oinMod => now;
+        while(oinMod.recv(oscMsg) )
+        { 
+            oscMsg.getFloat(0) => low;
+            oscMsg.getFloat(1) => high;
+            low => bufMods[0]; high => bufMods[1]
+        }
     }
 }

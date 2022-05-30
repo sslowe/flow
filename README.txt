@@ -37,7 +37,7 @@ Both:
 ===== WEEK 2 =====
 
 Sam:
-	[DONE] Debug Both Versions 
+	[DONE] Debug Both Versions
 	[DONE] Reverse signal direction
 	[DONE] More sound design
 	[DONE] Source Behavior
@@ -53,9 +53,12 @@ Egor:
 ===== WEEK 3 =====
 
 Sam:
-	Different flow modes/Effects
+	As needed for final composition:
+		[DONE] Different flow modes (Largest First)
+		Other Sound Design (Lo and Hi control on buffrates)
 
 Egor:
 	Control for the above^^
 	Finish Graph Visualization
-	Fade Blue
+	Class Feedback (Node Labeling/Match Stage setup?)
+	Bugs (Blue/Sync Issues)

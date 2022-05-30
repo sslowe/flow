@@ -5,19 +5,22 @@ const connect = require('connect')
 const serveStatic = require('serve-static')
 connect().use(serveStatic(__dirname)).listen(8080, () => console.log('Server running on 8080...'))
 
-const STATIONS = 10 
+const STATIONS = 11
 const NODES = 6
 
 const SIZE = STATIONS
 
 let edges = new Array(SIZE)
 let flow = new Array(SIZE)
+let bufMods = new Array(SIZE);
 let sourceNode = 1 // hemi 2 to align with default viewer
 let sourceSamp = 3 // node 4 to align with default viewer
   
 for (let i = 0; i < edges.length; i++) {
     edges[i] = new Array(SIZE)
     flow[i] = new Array(SIZE)
+    bufMods[i] = new Array(2)
+    bufMods[i][0] = 0; bufMods[i][1] = 0; 
     for (let j = 0; j < edges.length; j++) {
         edges[i][j] = -1
         flow[i][j] = 0
@@ -34,7 +37,7 @@ var udpPort = new osc.UDPPort({
 udpPort.open();
 
 const client_machines = [
-    //"meatloaf.local",
+    "meatloaf.local",
     "chowder.local",
     "Peanutbutter.local",
     "donut.local",
@@ -43,7 +46,8 @@ const client_machines = [
     "lasagna.local",
     "quinoa.local",
     "spam.local",
-    "vindaloo.local"
+    "vindaloo.local",
+    "udon.local"
 ];
 
 const viz_machine = "localhost"; // machine that only has the visualization
@@ -146,6 +150,26 @@ udpPort.on("audiolevel", function (oscMsg, timeTag, info) {
 setInterval(updateChuck, 500)
 
 function updateChuck() {
+    oinEdge.addAddress( "/bufMod, i f f" );
+    for (let i = 0; i < STATIONS; i++) {
+        udpPort.send({
+            address: "/bufMod",
+            args: [
+                {
+                    type: "i",
+                    value: i
+                },
+                {
+                    type: "f",
+                    value: bufMods[i][0]
+                },
+                {
+                    type: "f",
+                    value: bufMods[i][1]
+                }
+            ]
+        });
+    }
 
     udpPort.send({
         address: "/flowSource",
