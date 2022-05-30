@@ -60,5 +60,9 @@ Sam:
 Egor:
 	Control for the above^^
 	Finish Graph Visualization
-	Class Feedback (Node Labeling/Match Stage setup?)
-	Bugs (Blue/Sync Issues)
+	    sound animation of edges?
+	    put numbers on the pictures
+
+	Fade Blue/Sync Issue (On reload, toggle)
+    Force update state osc message to all viewers
+>>>>>>> c0687e2a436c5e5a35dc3b369c4d997223268607

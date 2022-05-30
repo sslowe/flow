@@ -34,7 +34,7 @@ const sinkDefault = 3;
 
 // positions
 const numNodes = 10;
-const nodePositions = [
+const nodePositionsSymmetric = [
     [innerRelPos, Math.PI/4],
     [innerRelPos, 3*Math.PI/4],
     [innerRelPos, -3*Math.PI/4],
@@ -45,10 +45,25 @@ const nodePositions = [
     [1.0, Math.PI],
     [1.0, -2*Math.PI/3],
     [1.0, -Math.PI/3],
-]
+];
+
+const nodePositionsSLOrk = [
+    [2*innerRelPos, -Math.PI/2],
+    [2.2*innerRelPos, 0+0.2],
+    [2*innerRelPos, Math.PI/3+0.0],
+    [2*innerRelPos, 2*Math.PI/3-0.0],
+    [2.2*innerRelPos, Math.PI-0.2],
+    [1.2, 0-0.0],
+    [1.0, Math.PI/4-0.1],
+    [1.0, Math.PI/2],
+    [1.0, 3*Math.PI/4+0.1],
+    [1.2, Math.PI+0.0],
+];
+
+const nodePositions = nodePositionsSLOrk;
 
 function polarToPos(r, phi) {
     let x = distanceScale*r*Math.cos(phi);
-    let y = distanceScale*r*Math.sin(phi);
+    let y = -distanceScale*r*Math.sin(phi);
     return [x + csize/2,y + csize/2];
 }

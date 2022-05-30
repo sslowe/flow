@@ -36,6 +36,24 @@ function setup() {
         }
     });
 
+    socket.on("audiolevel", (data) => {
+        console.log(data);
+        nodes[data.id].setVolume(data.level);
+    });
+
+    socket.on("force_state", (data) => {
+       for (let i=0; i<10; i++) {
+           for (let j=0; j<10; j++) {
+               edge_value = data.edges[j][i];
+               if (edge_value === -1) {
+                   edgelist.deactivateEdge(j, i);
+               } else {
+                   edgelist.activateEdge(j,i);
+               }
+           }
+       }
+    });
+
     nodes[sourceDefault].setSource();
 
     select("#sourceselect"+String(sourceDefault+1)).elt.checked = true;
@@ -49,12 +67,16 @@ function setup() {
             socket.emit("source_update", {"previous_source": source, "new_source": i});
 
             source = i;
+
+            // button latch bugfix?
+            select("#canvas").elt.focus();
         }
     }
     for (let i = 0; i < 6; i++) {
         select("#pitchselect"+String(i+1)).elt.onclick = function() {
             socket.emit("pitch_update", {"previous_pitch": pitch, "new_pitch": i});
             pitch = i;
+            select("#canvas").elt.focus();
         }
     }
 }

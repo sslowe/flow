@@ -36,6 +36,15 @@ var udpPort = new osc.UDPPort({
 
 udpPort.open();
 
+var udpPlayInfo = new osc.UDPPort({
+    localAddress: "0.0.0.0",
+    localPort: 6451,
+    remoteAddress: "localhost",//"Sams-Macbook-Pro.local",
+    remotePort: 9998
+});
+
+udpPlayInfo.open();
+
 const client_machines = [
     "meatloaf.local",
     "chowder.local",
@@ -98,7 +107,6 @@ for (let i = 0; i < client_websockets.length; i++) {
             let new_pitch = data.pitch;
             let new_flow = data.flow;
             // now do what you want
-            // e.g.
             let cap = Math.floor(new_flow * (9)) + 1
             console.log("creating edge from " + edge_j + " to " + edge_i + " with capacity " + cap + " playing node " + (new_pitch - 1))
             edges[edge_j][edge_i] = new_pitch - 1
@@ -141,13 +149,20 @@ for (let i = 0; i < client_websockets.length; i++) {
     });
 }
 
-udpPort.on("audiolevel", function (oscMsg, timeTag, info) {
-    console.log("An OSC message just arrived!", oscMsg);
-    console.log("Remote info is: ", info);
+udpPlayInfo.on("message", function (msg, timeTag, info) {
+    if (msg.address === "/audiolevel") {
+
+        var level_scaling = 1.0
+
+        var machine = msg.args[0]-1;
+        var level = msg.args[0] * level_scaling;
+
+        viz_socket.emit("audiolevel", {"id": machine, "level": level});
+    }
 });
 
 
-setInterval(updateChuck, 500)
+setInterval(updateChuck, 500);
 
 function updateChuck() {
     oinEdge.addAddress( "/bufMod, i f f" );
@@ -212,4 +227,11 @@ function updateChuck() {
     }
 }
 
+setInterval(forceCommonState, 2000);
 
+function forceCommonState() {
+    for (let j = 0; j < client_websockets.length; j++) {
+        client_websockets[j].emit("force_state", {"edges": edges});
+    }
+    viz_socket.emit("force_state", {"edges": edges});
+}
