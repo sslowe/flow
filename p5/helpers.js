@@ -67,3 +67,10 @@ function polarToPos(r, phi) {
     let y = -distanceScale*r*Math.sin(phi);
     return [x + csize/2,y + csize/2];
 }
+
+let font;
+function preload() {
+    font = loadFont('inconsolata.otf');
+}
+
+const textsize = 0.7*nodeSize;

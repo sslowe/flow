@@ -9,6 +9,9 @@ class Node {
         // volume from 0 to 1
         this.vol = 0;
         this.own = 0;
+
+        this.show_number = false;
+        this.id = -1;
     }
 
     setRegular() {
@@ -31,8 +34,11 @@ class Node {
         let cFull = color(...nodeColor);
         let cVol = color(...nodeOuterColor);
         let cOwn = color(...nodeOwnColor);
+
+
+
         noStroke();
-        fill(cVol)
+        fill(cVol);
         ellipse(this.x, this.y, nodeSize*(1+this.vol), nodeSize*(1+this.vol));
         if (this.state === 1) {
             strokeWeight(nodeStroke);
@@ -45,6 +51,11 @@ class Node {
         }
         ellipse(this.x, this.y, nodeSize, nodeSize);
 
+        if (this.show_number) {
+            fill(255);
+            noStroke();
+            text(this.id, this.x-0.5, this.y-3);
+        }
     }
 }
 

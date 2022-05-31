@@ -18,6 +18,8 @@ let nodes = [];
 for (let i = 0; i < numNodes; i++) {
     let n = new Node(nodePositions[i][0], nodePositions[i][1]);
     nodes.push(n);
+    nodes[i].show_number = true;
+    nodes[i].id = String(i+1);
 }
 
 let edgelist = new EdgeList(nodes);
@@ -139,6 +141,10 @@ function setup() {
             select("#canvas").elt.focus();
         }
     }
+
+    textAlign(CENTER,CENTER);
+    textFont(font);
+    textSize(textsize);
 }
 
 function draw() {
