@@ -146,6 +146,24 @@ for (let i = 0; i < client_websockets.length; i++) {
             let new_pitch = data.val;
             edges[edge_j][edge_i] = new_pitch - 1
         });
+
+        socket.on("highs_update", function(data) {
+            console.log(data);
+            let new_highs = data.val;
+
+            // use it here
+            // ....
+
+        });
+
+        socket.on("lows_update", function(data) {
+            console.log(data);
+            let new_lows = data.val;
+
+            // use it here
+            // ....
+
+        });
     });
 }
 
@@ -165,7 +183,7 @@ udpPlayInfo.on("message", function (msg, timeTag, info) {
 setInterval(updateChuck, 500);
 
 function updateChuck() {
-    oinEdge.addAddress( "/bufMod, i f f" );
+    //oinEdge.addAddress( "/bufMod, i f f" );
     for (let i = 0; i < STATIONS; i++) {
         udpPort.send({
             address: "/bufMod",

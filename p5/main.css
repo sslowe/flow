@@ -25,3 +25,7 @@
 .input-knob:disabled {
     background-color: #ffdefc;
 }
+
+.freq-control {
+    font-size: 14pt;
+}
