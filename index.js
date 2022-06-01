@@ -172,7 +172,7 @@ for (let i = 0; i < client_websockets.length; i++) {
 udpPlayInfo.on("message", function (msg, timeTag, info) {
     if (msg.address === "/audiolevel") {
 
-        var level_scaling = 1.0
+        var level_scaling = 30.0
 
         var machine = msg.args[0]-1;
         var level = msg.args[1] * level_scaling;

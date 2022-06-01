@@ -58,10 +58,10 @@ Sam:
 		[DONE] Other Sound Design (Lo and Hi control on buffrates)
 
 Egor:
-	Control for the above^^
-	Finish Graph Visualization
+	[DONE] Control for the above^^
+	[DONE] Finish Graph Visualization
 	    sound animation of edges?
 	    put numbers on the pictures
 
-	Fade Blue/Sync Issue (On reload, toggle)
-    Force update state osc message to all viewers
+	Fade Blue
+    [DONE] Force update state osc message to all viewers

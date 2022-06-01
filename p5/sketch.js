@@ -37,7 +37,7 @@ function setup() {
     });
 
     socket.on("audiolevel", (data) => {
-        console.log(data);
+        //console.log(data);
         nodes[data.id].setVolume(data.level);
     });
 
@@ -79,6 +79,7 @@ function setup() {
             select("#canvas").elt.focus();
         }
     }
+    frameRate(15);
 }
 
 function draw() {
