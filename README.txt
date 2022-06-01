@@ -55,7 +55,7 @@ Egor:
 Sam:
 	As needed for final composition:
 		[DONE] Different flow modes (Largest First)
-		Other Sound Design (Lo and Hi control on buffrates)
+		[DONE] Other Sound Design (Lo and Hi control on buffrates)
 
 Egor:
 	Control for the above^^
@@ -65,4 +65,3 @@ Egor:
 
 	Fade Blue/Sync Issue (On reload, toggle)
     Force update state osc message to all viewers
->>>>>>> c0687e2a436c5e5a35dc3b369c4d997223268607

@@ -5,7 +5,7 @@ const connect = require('connect')
 const serveStatic = require('serve-static')
 connect().use(serveStatic(__dirname)).listen(8080, () => console.log('Server running on 8080...'))
 
-const STATIONS = 11
+const STATIONS = 10
 const NODES = 6
 
 const SIZE = STATIONS
@@ -149,8 +149,9 @@ for (let i = 0; i < client_websockets.length; i++) {
 
         socket.on("highs_update", function(data) {
             console.log(data);
+            let machine = data.id;
             let new_highs = data.val;
-
+            bufMods[machine][1] = new_highs
             // use it here
             // ....
 
@@ -158,8 +159,9 @@ for (let i = 0; i < client_websockets.length; i++) {
 
         socket.on("lows_update", function(data) {
             console.log(data);
+            let machine = data.id;
             let new_lows = data.val;
-
+            bufMods[machine][0] = new_lows
             // use it here
             // ....
 
@@ -173,7 +175,7 @@ udpPlayInfo.on("message", function (msg, timeTag, info) {
         var level_scaling = 1.0
 
         var machine = msg.args[0]-1;
-        var level = msg.args[0] * level_scaling;
+        var level = msg.args[1] * level_scaling;
 
         viz_socket.emit("audiolevel", {"id": machine, "level": level});
     }

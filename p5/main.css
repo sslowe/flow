@@ -1,3 +1,9 @@
+.btn:focus{
+    color: #fff;
+    background-color: #fff;    
+    border-color: #747e80;
+}
+
 .btn-outline-primary {
     color: #5f6769;
     border-color: #5f6769;

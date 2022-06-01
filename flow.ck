@@ -3,7 +3,7 @@
 //-------------------------------------
 //-------------------------------------
 // Magic
-11 => int stations;
+10 => int stations;
 
 //-------------------------------------
 //-------------------------------------
@@ -69,9 +69,10 @@ oinSync.addAddress( "/sync, i" );
 //-------------------------------------
 //-------------------------------------
 // Spork and Spin
-
+OscOut xmit;
 if (machineNum == 0)
 {
+   xmit.dest( hostname, port );
    spork ~ edgeListener();
    spork ~ sourceListener();
    spork ~ bufServer();
@@ -79,6 +80,7 @@ if (machineNum == 0)
 }
 else
 {
+    xmit.dest( hostname , 6451 );
     spork ~ player();
     spork ~ emit_level();
     spork ~ bufListener();
@@ -135,8 +137,6 @@ fun void edgeListener()
 }
 
 fun void emit_level() {
-    OscOut xmit;
-    xmit.dest( "localhost", 6451 );
 
     while(true) {
         xmit.start( "/audiolevel" );
@@ -182,8 +182,6 @@ fun void playNode(int node)
 
 fun void clock()
 {
-    OscOut xmit;
-    xmit.dest( hostname, port );
 
     0 => int beat;
     int movingFlow[stations][stations];
@@ -249,7 +247,7 @@ fun void clock()
             }   
         }
    
-        propagatePriority(signals) @=> signals;
+        propagatePriority(signals, movingFlow) @=> signals;
         beat + 1 => beat;
         xmit.start( "/sync" ); 0 => xmit.add;
         xmit.send();
@@ -257,7 +255,7 @@ fun void clock()
     }
 }
 
-fun int[][] propagatePriority(int signals[][])
+fun int[][] propagatePriority(int signals[][], int movingFlow[][])
 {
     int newSignals[signals.size()][nodeCount];
     1 => newSignals[sourceNode][sourceSamp];
@@ -296,7 +294,7 @@ fun int[][] propagatePriority(int signals[][])
     return newSignals;
 }
 
-fun int[][] propagateMax(int signals[][])
+fun int[][] propagateMax(int signals[][], int movingFlow[][])
 {
     int newSignals[signals.size()][nodeCount];
     1 => newSignals[sourceNode][sourceSamp];
@@ -347,7 +345,7 @@ fun void bufServer()
     OscIn oinMod;
     OscMsg oscMsg;
     nodeInPort => oinMod.port;
-    oinEdge.addAddress( "/bufMod, i f f" );
+    oinMod.addAddress( "/bufMod, i f f" );
     int node;
     float low;
     float high;
@@ -373,7 +371,7 @@ fun void bufListener()
     OscIn oinMod;
     OscMsg oscMsg;
     port => oinMod.port;
-    oinEdge.addAddress( "/bufMod" + (machineNum - 1) + ", f f" );
+    oinMod.addAddress( "/bufMod" + (machineNum - 1) + ", f f" );
     float low;
     float high;
 
@@ -384,7 +382,7 @@ fun void bufListener()
         { 
             oscMsg.getFloat(0) => low;
             oscMsg.getFloat(1) => high;
-            low => bufMods[0]; high => bufMods[1]
+            low => bufMods[0]; high => bufMods[1];
         }
     }
 }
