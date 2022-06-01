@@ -142,6 +142,9 @@ function setup() {
             select("#canvas").elt.focus();
         }
 
+        select("#highs").elt.value = 0.0;
+        select("#lows").elt.value = 0.0;
+
         select("#highs").elt.oninput = function () {
             select("#highsval").elt.innerHTML = Number(select("#highs").value()).toFixed(2);
 
@@ -152,7 +155,7 @@ function setup() {
         }
 
         select("#lows").elt.oninput = function () {
-            select("#lowsval").elt.innerHTML = Number(select("#highs").value()).toFixed(2);
+            select("#lowsval").elt.innerHTML = Number(select("#lows").value()).toFixed(2);
 
             socket.emit("lows_update", {
                 "id": parseInt(playerId)-1,
