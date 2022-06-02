@@ -38,7 +38,9 @@ function setup() {
 
     socket.on("audiolevel", (data) => {
         //console.log(data);
-        nodes[data.id].setVolume(data.level);
+        if (data.level > 0.01) {
+            nodes[data.id].setVolume(data.level);
+        }
     });
 
     socket.on("force_state", (data) => {
@@ -90,5 +92,7 @@ function draw() {
     for (let i = 0; i < numNodes; i++) {
         // nodes[i].setVolume(Math.random());
         nodes[i].draw();
+        nodes[i].drawVol();
+        nodes[i].lifetime += 1;
     }
 }
