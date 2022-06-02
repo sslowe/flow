@@ -35,7 +35,7 @@ for (0 => int i; i < nodeCount; i++)
     Math.random2(0,2) => int sample;
     me.sourceDir() + "samples/drop" + sample + ".wav" => nodes[i].read; nodes[i].gain(0);
     Math.random2f(.3,1.7) => bufRates[i];
-    nodes[i] => dac;//.chan(i);
+    nodes[i] => dac.chan(i);
 
     // connect to meter
     nodes[i] => meter_input;
