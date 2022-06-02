@@ -148,7 +148,7 @@ for (let i = 0; i < client_websockets.length; i++) {
         });
 
         socket.on("highs_update", function(data) {
-            console.log(data);
+            // console.log(data);
             let machine = data.id;
             let new_highs = data.val;
             bufMods[machine][1] = new_highs
@@ -158,7 +158,7 @@ for (let i = 0; i < client_websockets.length; i++) {
         });
 
         socket.on("lows_update", function(data) {
-            console.log(data);
+            // console.log(data);
             let machine = data.id;
             let new_lows = data.val;
             bufMods[machine][0] = new_lows
@@ -250,8 +250,8 @@ function updateChuck() {
 setInterval(forceCommonState, 2000);
 
 function forceCommonState() {
-    for (let j = 0; j < client_websockets.length; j++) {
-        client_websockets[j].emit("force_state", {"edges": edges});
-    }
-    viz_socket.emit("force_state", {"edges": edges});
+    // for (let j = 0; j < client_websockets.length; j++) {
+    //     client_websockets[j].emit("force_state", {"edges": edges});
+    // }
+    viz_socket.emit("force_state", {"edges": edges, "source": sourceNode, "pitch": sourceSamp});
 }

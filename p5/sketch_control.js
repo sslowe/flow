@@ -146,6 +146,7 @@ function setup() {
         select("#lows").elt.value = 0.0;
 
         select("#highs").elt.oninput = function () {
+            console.log(select("#highs").value())
             select("#highsval").elt.innerHTML = Number(select("#highs").value()).toFixed(2);
 
             socket.emit("highs_update", {
@@ -155,6 +156,7 @@ function setup() {
         }
 
         select("#lows").elt.oninput = function () {
+            console.log(select("#lows").value())
             select("#lowsval").elt.innerHTML = Number(select("#lows").value()).toFixed(2);
 
             socket.emit("lows_update", {

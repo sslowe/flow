@@ -40,6 +40,7 @@ function setup() {
         //console.log(data);
         if (data.level > 0.01) {
             nodes[data.id].setVolume(data.level);
+            nodes[data.id].lifetime = 0;
         }
     });
 
