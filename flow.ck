@@ -35,7 +35,7 @@ for (0 => int i; i < nodeCount; i++)
     Math.random2(0,2) => int sample;
     me.sourceDir() + "samples/drop" + sample + ".wav" => nodes[i].read; nodes[i].gain(0);
     Math.random2f(.3,1.7) => bufRates[i];
-    nodes[i] => dac.chan(i);
+    nodes[i] => dac;//.chan(i);
 
     // connect to meter
     nodes[i] => meter_input;
@@ -168,13 +168,13 @@ fun void player()
 fun void playNode(int node)
 {
     oinSync => now;
-    if(bufRates[node] >=1)
+    if(bufRates[node] >= 1)
     {
-        (bufMods[1] * bufRates[node]) + ((1 - bufMods[1]) * 1) => nodes[node].rate;
+        (bufMods[1] * bufRates[node]) + ((1 - bufMods[1]) * 1.) => nodes[node].rate;
     }
     else
     {
-        (bufMods[0] * bufRates[node]) + ((1 - bufMods[0]) * 1) => nodes[node].rate;
+        (bufMods[0] * bufRates[node]) + ((1 - bufMods[0]) * 1.) => nodes[node].rate;
     }
     0.9 => nodes[node].gain;
     0 => nodes[node].pos;
