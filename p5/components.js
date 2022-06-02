@@ -27,7 +27,7 @@ class Node {
     }
 
     setVolume(vol) {
-        this.vol = vol*36;
+        this.vol = vol;
     }
 
     draw() {

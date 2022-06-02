@@ -143,7 +143,7 @@ fun void emit_level() {
         machineNum => xmit.add;
         p.last() => xmit.add;
         xmit.send();
-        100::ms => now;
+        10::ms => now;
     }
 }
 
