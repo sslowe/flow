@@ -35,7 +35,6 @@ class Node {
 
     draw() {
         let cFull = color(...nodeColor);
-        let cVol = color(...nodeOuterColor);
         let cOwn = color(...nodeOwnColor);
 
         noStroke();
@@ -58,6 +57,7 @@ class Node {
     }
 
     drawVol() {
+        let cVol = color(...nodeOuterColor);
         noStroke();
         fill(cVol);
         ellipse(this.x, this.y, nodeSize*(1+this.vol)*(1-volDecay*this.lifetime), nodeSize*(1+this.vol)*(1-volDecay*this.lifetime));
