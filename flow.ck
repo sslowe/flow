@@ -358,6 +358,7 @@ fun void bufServer()
             oscMsg.getInt(0) => node;
             oscMsg.getFloat(1) => low;
             oscMsg.getFloat(2) => high;
+            // <<< "got bufMod message:" node, low, high >>>;
 
             xmit.start( "/bufMod" + node ); 
             low => xmit.add; high => xmit.add;
