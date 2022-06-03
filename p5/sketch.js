@@ -37,7 +37,7 @@ function setup() {
     });
 
     socket.on("audiolevel", (data) => {
-        //console.log(data);
+        console.log(data);
         if (data.level > 0.01) {
             nodes[data.id].setVolume(data.level*2);
             nodes[data.id].lifetime = 0;
