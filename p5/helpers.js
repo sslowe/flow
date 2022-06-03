@@ -11,15 +11,15 @@ const innerRelPos = 0.3
 const nodeStroke = 4;
 
 const edgeWidth = 3;
-const edgeColorActiveDir1 = [187, 217, 56];
-const edgeColorActiveDir2 = [217, 145, 56];
-const edgeColorActiveBoth = [129, 41, 204];
+const edgeColorActiveDir1 = [124, 128, 135]; // [187, 217, 56];
+const edgeColorActiveDir2 = [124, 128, 135]; // [217, 145, 56];
+const edgeColorActiveBoth = [82, 82, 82]; // [129, 41, 204];
 const edgeColorInactive = [0, 10];
 
 // default control parameters
 const patterns = [1,1,1,1,1,1,1,1,1,1];
 const pitches  = [1,1,1,1,1,1,1,1,1,1];
-const flows = [0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5];
+const flows = [0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0];
 
 // control colors
 const patternColorActive = "#ba24ff";
@@ -32,7 +32,7 @@ const flowColorInactive = "#ffdefc";
 const sourceDefault = 1;
 const sinkDefault = 3;
 
-const volDecay = 0.01;
+const volDecay = 0.05;
 
 // positions
 const numNodes = 10;
