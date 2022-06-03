@@ -18,6 +18,8 @@ const destination_address = "http://localhost:4399"
 var source = sourceDefault;
 var pitch = 0;
 
+var timeSinceLastUpdate = 0;
+
 function setup() {
     createCanvas(csize, csize);
 
@@ -26,7 +28,10 @@ function setup() {
     socket.on("edge_enable", (data) => {
         console.log(data);
         if (!edgelist.isActive(data.i, data.j)) {
-            edgelist.activateEdge(data.i, data.j);
+            if (timeSinceLastUpdate > 10) {
+                edgelist.activateEdge(data.i, data.j);
+                timeSinceLastUpdate = 0;
+            }
         }
     });
     socket.on("edge_disable", (data) => {
@@ -96,5 +101,7 @@ function draw() {
         nodes[i].drawVol();
         nodes[i].lifetime += 1;
     }
+
+    timeSinceLastUpdate += 1;
     //console.log(0, nodes[0].vol);
 }
