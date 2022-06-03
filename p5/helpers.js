@@ -19,7 +19,7 @@ const edgeColorInactive = [0, 10];
 // default control parameters
 const patterns = [1,1,1,1,1,1,1,1,1,1];
 const pitches  = [1,1,1,1,1,1,1,1,1,1];
-const flows = [0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5];
+const flows = [0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0];
 
 // control colors
 const patternColorActive = "#ba24ff";
