@@ -18,7 +18,7 @@ const destination_address = "http://localhost:4399"
 var source = sourceDefault;
 var pitch = 0;
 
-var timeSinceLastUpdate = 0;
+var timeSinceLastUpdate = [0,0,0,0,0,0,0,0,0,0];
 
 function setup() {
     createCanvas(csize, csize);
@@ -41,10 +41,10 @@ function setup() {
     socket.on("audiolevel", (data) => {
         //console.log(data, timeSinceLastUpdate);
         if (data.level > 0.01) {
-            if (timeSinceLastUpdate > 10) {
-                nodes[data.id].setVolume(data.level*15);
+            if (timeSinceLastUpdate[data.id] > 3) {
+                nodes[data.id].setVolume(data.level*8);
                 nodes[data.id].lifetime = 0;
-                timeSinceLastUpdate = 0;
+                timeSinceLastUpdate[data.id] = 0;
 
             }
         }
@@ -101,8 +101,8 @@ function draw() {
         nodes[i].draw();
         nodes[i].drawVol();
         nodes[i].lifetime += 1;
+        timeSinceLastUpdate[i] += 1;
     }
 
-    timeSinceLastUpdate += 1;
     //console.log(0, nodes[0].vol);
 }
