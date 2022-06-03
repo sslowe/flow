@@ -30,7 +30,7 @@ class Node {
     }
 
     setVolume(vol) {
-        this.vol = max([vol, 3*nodeSize]);
+        this.vol  = min([vol, 1.5]);
     }
 
     draw() {
@@ -60,7 +60,15 @@ class Node {
         let cVol = color(...nodeOuterColor);
         noStroke();
         fill(cVol);
-        ellipse(this.x, this.y, nodeSize*(1+this.vol)*(1-volDecay*this.lifetime), nodeSize*(1+this.vol)*(1-volDecay*this.lifetime));
+
+        let x_size = nodeSize * (
+            1 + this.vol*(1-min([1, volDecay*this.lifetime]))
+        );
+
+        let y_size = nodeSize * (
+            1 + this.vol*(1-min([1, volDecay*this.lifetime]))
+        );
+        ellipse(this.x, this.y, x_size, y_size);
     }
 }
 

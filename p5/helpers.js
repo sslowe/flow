@@ -32,7 +32,7 @@ const flowColorInactive = "#ffdefc";
 const sourceDefault = 1;
 const sinkDefault = 3;
 
-const volDecay = 0.01;
+const volDecay = 0.05;
 
 // positions
 const numNodes = 10;

@@ -39,22 +39,22 @@ function setup() {
     socket.on("audiolevel", (data) => {
         //console.log(data);
         if (data.level > 0.01) {
-            nodes[data.id].setVolume(data.level);
+            nodes[data.id].setVolume(data.level*2);
             nodes[data.id].lifetime = 0;
         }
     });
 
     socket.on("force_state", (data) => {
-       for (let i=0; i<10; i++) {
-           for (let j=0; j<10; j++) {
-               edge_value = data.edges[j][i];
-               if (edge_value === -1) {
-                   edgelist.deactivateEdge(j, i);
-               } else {
-                   edgelist.activateEdge(j,i);
-               }
-           }
-       }
+        for (let i=0; i<10; i++) {
+            for (let j=0; j<10; j++) {
+                edge_value = data.edges[j][i];
+                if (edge_value === -1) {
+                    edgelist.deactivateEdge(j, i);
+                } else {
+                    edgelist.activateEdge(j,i);
+                }
+            }
+        }
     });
 
     nodes[sourceDefault].setSource();
@@ -96,4 +96,5 @@ function draw() {
         nodes[i].drawVol();
         nodes[i].lifetime += 1;
     }
+    //console.log(0, nodes[0].vol);
 }
