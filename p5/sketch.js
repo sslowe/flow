@@ -28,10 +28,9 @@ function setup() {
     socket.on("edge_enable", (data) => {
         console.log(data);
         if (!edgelist.isActive(data.i, data.j)) {
-            if (timeSinceLastUpdate > 10) {
+            
                 edgelist.activateEdge(data.i, data.j);
-                timeSinceLastUpdate = 0;
-            }
+            
         }
     });
     socket.on("edge_disable", (data) => {
@@ -42,10 +41,14 @@ function setup() {
     });
 
     socket.on("audiolevel", (data) => {
-        console.log(data);
+        //console.log(data, timeSinceLastUpdate);
         if (data.level > 0.01) {
-            nodes[data.id].setVolume(data.level*2);
-            nodes[data.id].lifetime = 0;
+            if (timeSinceLastUpdate > 10) {
+                nodes[data.id].setVolume(data.level*15);
+                nodes[data.id].lifetime = 0;
+                timeSinceLastUpdate = 0;
+
+            }
         }
     });
 

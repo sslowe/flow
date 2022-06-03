@@ -62,11 +62,11 @@ class Node {
         fill(cVol);
 
         let x_size = nodeSize * (
-            1 + this.vol*(1-min([1, volDecay*this.lifetime]))
+            1 + (3* this.vol*(1-min([1, volDecay*this.lifetime])))
         );
 
         let y_size = nodeSize * (
-            1 + this.vol*(1-min([1, volDecay*this.lifetime]))
+            1 + (3* this.vol*(1-min([1, volDecay*this.lifetime])))
         );
         ellipse(this.x, this.y, x_size, y_size);
     }
