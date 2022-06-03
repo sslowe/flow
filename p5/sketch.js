@@ -42,7 +42,7 @@ function setup() {
         //console.log(data, timeSinceLastUpdate);
         if (data.level > 0.01) {
             if (timeSinceLastUpdate[data.id] > 3) {
-                nodes[data.id].setVolume(data.level*8);
+                nodes[data.id].setVolume(data.level*10);
                 nodes[data.id].lifetime = 0;
                 timeSinceLastUpdate[data.id] = 0;
 

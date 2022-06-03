@@ -1,6 +1,6 @@
 // constants
-const csize = 720;
-const nodeSize = 35;
+const csize = 1200;
+const nodeSize = 40;
 const nodeColor = [66, 138, 245];
 const nodeVolAlpha = 0.5;
 const nodeOuterColor = [169, 199, 245, nodeVolAlpha*255];
@@ -8,7 +8,7 @@ const nodeSourceColor = [69, 214, 127];
 const nodeOwnColor = [212, 66, 245];
 const distanceScale = 0.375*csize;
 const innerRelPos = 0.6
-const nodeStroke = 4;
+const nodeStroke = 8;
 
 const edgeWidth = 3;
 const edgeColorActiveDir1 = [124, 128, 135]; // [187, 217, 56];
