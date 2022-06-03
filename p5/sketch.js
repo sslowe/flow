@@ -28,9 +28,7 @@ function setup() {
     socket.on("edge_enable", (data) => {
         console.log(data);
         if (!edgelist.isActive(data.i, data.j)) {
-            
                 edgelist.activateEdge(data.i, data.j);
-            
         }
     });
     socket.on("edge_disable", (data) => {

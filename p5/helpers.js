@@ -7,7 +7,7 @@ const nodeOuterColor = [169, 199, 245, nodeVolAlpha*255];
 const nodeSourceColor = [69, 214, 127];
 const nodeOwnColor = [212, 66, 245];
 const distanceScale = 0.375*csize;
-const innerRelPos = 0.3
+const innerRelPos = 0.6
 const nodeStroke = 4;
 
 const edgeWidth = 3;
@@ -62,7 +62,20 @@ const nodePositionsSLOrk = [
     [1.2, Math.PI+0.0],
 ];
 
-const nodePositions = nodePositionsSLOrk;
+const nodePositionsBing = [
+    [innerRelPos, 0 + 0.2],
+    [innerRelPos, Math.PI/3],
+    [innerRelPos, 2*Math.PI/3],
+    [innerRelPos, Math.PI - 0.2],
+    [1.0, 0],
+    [1.0, Math.PI/5],
+    [1.0,  2*Math.PI/5],
+    [1.0, 3*Math.PI/5],
+    [1.0, 4*Math.PI/5],
+    [1.0, Math.PI],
+];
+
+const nodePositions = nodePositionsBing;
 
 function polarToPos(r, phi) {
     let x = distanceScale*r*Math.cos(phi);
