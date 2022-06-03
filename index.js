@@ -82,7 +82,7 @@ viz_socket.on("connection", (socket) => {
         // console.log(data);
         let new_source = data.new_source;
         let previous_source = data.previous_source;
-        sourceNode = new_source - 1
+        sourceNode = new_source
         for (let i = 0; i < client_websockets.length; i++) {
             client_websockets[i].emit("source_update", {"new_source": new_source});
         }

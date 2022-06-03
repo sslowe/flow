@@ -168,13 +168,13 @@ fun void player()
 fun void playNode(int node)
 {
     oinSync => now;
-    if(bufRates[node] >=1)
+    if(bufRates[node] >= 1)
     {
-        (bufMods[1] * bufRates[node]) + ((1 - bufMods[1]) * 1) => nodes[node].rate;
+        (bufMods[1] * bufRates[node]) + ((1 - bufMods[1]) * 1.) => nodes[node].rate;
     }
     else
     {
-        (bufMods[0] * bufRates[node]) + ((1 - bufMods[0]) * 1) => nodes[node].rate;
+        (bufMods[0] * bufRates[node]) + ((1 - bufMods[0]) * 1.) => nodes[node].rate;
     }
     0.9 => nodes[node].gain;
     0 => nodes[node].pos;
