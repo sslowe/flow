@@ -11,9 +11,9 @@ const innerRelPos = 0.3
 const nodeStroke = 4;
 
 const edgeWidth = 3;
-const edgeColorActiveDir1 = [187, 217, 56];
-const edgeColorActiveDir2 = [217, 145, 56];
-const edgeColorActiveBoth = [129, 41, 204];
+const edgeColorActiveDir1 = [124, 128, 135]; // [187, 217, 56];
+const edgeColorActiveDir2 = [124, 128, 135]; // [217, 145, 56];
+const edgeColorActiveBoth = [82, 82, 82]; // [129, 41, 204];
 const edgeColorInactive = [0, 10];
 
 // default control parameters
