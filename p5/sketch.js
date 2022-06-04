@@ -21,7 +21,7 @@ var pitch = 0;
 var timeSinceLastUpdate = [0,0,0,0,0,0,0,0,0,0];
 
 function setup() {
-    createCanvas(csize, csize);
+    createCanvas(csize, csize-520);
 
     socket = io(destination_address, { transports : ['websocket'] });
 
